@@ -147,7 +147,8 @@ later}
  \normalfont
  \vbox to0pt{\vskip-40pt
  \nointerlineskip
- \makeheadbox\vss}\nointerlineskip
+ %\makeheadbox
+ \vss}\nointerlineskip
  \if@normhead
     \setbox\authrun=\vbox\bgroup
  \fi
