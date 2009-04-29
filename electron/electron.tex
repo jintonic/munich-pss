@@ -1,5 +1,10 @@
 \documentclass[epj]{svjour}
+% options:
+% draft: draw boundaries of pictures
+% referee: doulbe line height
+% nopac: without PACS.
 \usepackage{graphicx}
+\usepackage{multirow}
 %
 \begin{document}
 %
@@ -67,10 +72,10 @@ Bremsstrahlung is low, electrons mainly create \emph{single-site
 events} with most of the energy deposited within a radius of 1~mm. In
 order to use this difference to distinguish background events from the
 $0\nu\beta\beta$ signal, true coaxial segmented $n$-type germanium
-detectors are considered for use in the second phase of GERDA. The
-size of the segments can be chosen such that electrons predominantly
-create \emph{single-segment events} while photons result in
-\emph{multi-segment events}. By requiring that only one segment has
+detectors are considered for use in the second phase (Phase~II) of
+GERDA. The size of the segments can be chosen such that electrons
+predominantly create \emph{single-segment events} while photons result
+in \emph{multi-segment events}. By requiring that only one segment has
 energy deposition most photon induced events can be
 rejected. \cite{photon}
 
@@ -106,12 +111,26 @@ collect large such samples. Therefore, it is essential to supplement
 the data with simulated pulses from a reliable simulation.
 
 A fully functional pulse shape simulation package is jointly developed
-by the GERDA and Majorana \cite{Gai03,Aal04} collaborations. The
-simulation was compared to the data collected with two GERDA Phase~II
-prototype detectors. The results are planned to be presented in a
-series of papers. This paper covers the detailed description of the
+by the GERDA and Majorana \cite{Gai03,Aal04} collaborations. In order
+to compare the simulation to the data collected with two GERDA
+Phase~II prototype detectors the model of the detector, as shown in
+Fig.~\ref{f:model}, is fixed accordingly in the simulation. However,
+the package can be used to simulate pulse shapes from any kind of
+germanium detectors with minor modification.
+
+The results of the comparison are planned to be presented in a series
+of papers. This paper covers the detailed description of the
 simulation methods and the verification of the simulation of pulses
 induced by electrons drift inside the germanium detector.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{model}
+\caption{Detector model implemented in the simulation according to the
+GERDA Phase~II prototype detector. The detector is equally separated
+to 6 sements in $\phi$ and 3 segments in $z$.}
+\label{f:model}
+\end{figure}
 
 \section{Pulse shape simulation}
 \label{s:pss}
@@ -154,21 +173,23 @@ sections.
 
 \subsection{Electric field}
 \label{s:field}
-The electric field $\mathbf{E}$ could, in principle, be calculated by
-solving analytically Poisson's equation $\nabla \cdot \mathbf{E} =
+The electric field $\vec{E}$ could, in principle, be calculated by
+solving analytically Poisson's equation $\nabla \cdot \vec{E} =
 \frac{\rho}{\epsilon}$, where $\rho$ is the space charge density
 defined by the effective number of impurities and $\epsilon$ is the
 dielectric constant. It is more practical to numerically calculate the
-potential field $\varphi$ with certain boundary conditions. The
-electric field $\mathbf{E}$ is then obtained using $\mathbf{E} = -
-\nabla \varphi$. Since true coaxial detectors are used, it is
+potential field $\varphi$ with certain boundary conditions. For true
+coaxial $n$-type detectors the potential is several kilo volt on the
+inner surface, zero on the outer surface and float on the end
+surfaces. The electric field $\vec{E}$ is then obtained using $\vec{E}
+= - \nabla \varphi$. Since true coaxial detectors are used, it is
 convenient to use cylindrical coordinates, $r, \phi, z$:
 \begin{equation} 
 \frac{1}{r} \frac{\partial \varphi}{\partial r} + 
 \frac{\partial^{2} \varphi}{\partial r^{2}} + 
 \frac{1}{r^{2}} \frac{\partial^{2} \varphi}{\partial \phi^{2}} + 
 \frac{\partial^{2} \varphi}{\partial z^{2}} = 
-- \frac{1}{\epsilon_{0} \epsilon_{R}} \rho, 
+- \frac{\rho}{\epsilon_{0} \epsilon_{R}}, 
 \label{e:pocyl} 
 \end{equation} 
 where $\varphi$ and $\rho$ are functions of $r, \phi, z$;
@@ -192,167 +213,184 @@ cylindrical coordinate $r$ for impurity densities between 0 and $0.9
 \label{f:rho} 
 \end{figure} 
 
-\subsection{Mobility} 
+\subsection{Drift of charge carriers} 
 \label{sec:pss:mobi} 
+\subsubsection{Mobility} 
+\label{sec:pss:mobi} 
+The relation between the drift velocity of the charge carriers,
+$\vec{v}_{e}(\vec{r})$ for electrons and $\vec{v}_{h}(\vec{r})$ for
+holes, and the electric field, $\vec{E}(\vec{r})$ can be simply
+expressed as:
+\begin{equation} 
+\label{eq:det:dv}
+\vec{v}_{e/h} (\vec{r})= \mu_{e/h} \vec{E}(\vec{r}),
+\end{equation}
+where $\mu_{e/h}$ is called the \emph{mobility} and $\vec{r}$
+indicates the position. The mobility changes with the temperature of
+the germanium crystal. If the temperature\footnote{If the velocities
+of a group of particles follow a Maxwell-Boltzmann distribution, their
+temperature is defined as the temperature of that distribution.} of
+the crystal lattice is the same as that of the charge carriers, the
+crystal structure has no influence on the drift. The drift velocity is
+proportional to the electric field so the mobility in this case is
+just a number. Since germanium detectors are normally operated at
+liquid nitrogen temperature ($\sim78$~K), the crystal lattice stays
+much calmer than the charge carriers and affects on their drift. The
+drift velocity hence is not always parallel to the electric field and
+the mobility in this case is a complex tensor.
 
-The physics models used for the drift of electrons and holes inside
-germanium crystals were established by L. Mihailescu \textit{et
-al.}\cite{miha} and B. Bruyneel \emph{et al.} \cite{bart},
-respectively.
-
-The electrons and holes drift to the electrodes of the detector. The
-mobilities of electrons $\mu_{e}$ and holes $\mu_{h}$ change with the
-temperature of the germanium crystal. If the temperature of electrons
-and holes\footnote{If the velocities of a group of electrons or holes
-follow a Maxwell-Boltzmann distribution, their temperature is defined
-as the temperature of that distribution.} do not differ much from the
-temperature of the crystal lattice, the drift velocity
-$\mathbf{v}_{e/h}$ is simply proportional to the electric field and
-the crystal structure has no influence. The mobility in this case is
-just a number,$\mu_{0}$. As germanium detectors are operated at
-$\approx 100$~K, the electrons and holes are hotter than the crystal
-lattice. The mobility in this case depends on the crystal orientation
-and is a complex tensor. The drift trajectory, hence, is not always
-parallel to the electric field.
- 
 Germanium has the same crystalline structure as silicon and diamond,
 namely, a face-centered cubic (FCC) structure: each atom is at the
 center of a regular tetrahedron and is surrounded by four atoms as
-shown in Fig.~\ref{f:xtal}.
- 
-\begin{figure}
+shown in Fig.~\ref{f:xtal}. Also shown is the definition of crystal
+axes in terms of the Miller index.
+\begin{figure}[htpb]
+\centering
 \includegraphics[width=\linewidth]{xtalStruc}   
 \caption{Structure of germanium crystals: (a) basic configuration and
 (b) definition of crystal axes.}
 \label{f:xtal} 
 \end{figure} 
  
-If the electric field lines are parallel to any of the three principal
-crystallographic axes $\langle 100 \rangle$, $\langle 110 \rangle$ and
-$\langle 111 \rangle$, the charge carriers will drift along the
-electric field because of the symmetric structure of the germanium
-crystal. In this case the drift velocity only depends on the strength
-of the electric field. Measurements of the drift velocities along the
-axes $\langle 100 \rangle$ and $\langle 111 \rangle$ with electric
-field parallel to them were performed and the data can be fitted well
-by the following parametrization \cite{Kno99}:
+If the electric field lines are parallel to any of the principal
+crystallographic axes, charge carriers will always drift along the
+electric field despite of the lattice temperature because of the
+symmetric structure of the germanium crystal. Measurements of the
+drift velocities along the axes $\langle 100 \rangle$ and $\langle 111
+\rangle$ with electric fields parallel to them were performed
+\cite{miha,reg} and the data can be fitted well by the following
+parametrization \cite{Kno99} with electric field strengths below
+300~V/mm \cite{miha}:
 \begin{equation} 
-\label{eq:pss:para} 
-v = \frac{\mu_{0}E}{[1+(\frac{E}{E_{0}})^{\beta}]^{1/\beta}} - \mu_{n}E, 
+\label{e:para} 
+v = \frac{\mu_{0}E}{[1+(\frac{E}{\mathcal{E}_{0}})^{\beta}]^{1/\beta}}, 
 \end{equation} 
-where $E, v$ are the magnitudes of the electric field and drift
-velocity, respectively, $\mu_{0}, \mu_{n}, E_{0}$ and $\beta$ are
+where $v,E$ are the magnitudes of the drift velocity and electric
+field, respectively, $\mu_{0},\mathcal{E}_{0}$ and $\beta$ are
 parameters to be determined by fitting. The parameter $\mu_{0}$
-represents a simple linear relation between $v$ and $E$. A deviation
-from this linear relation occurs at low temperatures
-($\approx$100~K). It is modeled through the parameters $E_{0}$ and
-$\beta$. Mihailescu \textit{et al.} \cite{miha} added the term
-$\mu_{n}E$ for electric fields stronger than 300~V/mm to account for
-the \emph{Gunn effect} observed by Ottaviani \textit{et al.}
-\cite{otta}. This effect is irrelevant here as our detectors are
-operated at field strengths well below 300~V/mm. The values of the
-parameters of the fit to the experimental data are listed in
-Table~\ref{t:pars}. They are an important input for the simulation
-presented here.
+represents the linear relation between $v$ and $E$ at high lattice
+temperature and low electric fields, while the parameters
+$\mathcal{E}_{0}$ and $\beta$ model the deviation from this linear
+relation at low lattice temperature and high electric fields. The
+values of the parameters of the fit to the experimental data are
+listed in Table~\ref{t:pars}. They are important input for the
+simulation presented here, because the drift velocity in an arbitrary
+direction can be derived from the velocities along the $\langle 100
+\rangle$ and $\langle 111 \rangle$ axes using models described in
+\cite{miha} and \cite{bart}. Equation~\ref{e:para} with the input
+parameters listed in Table~\ref{t:pars} is visualized in
+Fig.~\ref{f:vvse}.
  
-\begin{table*}\centering
-\caption{Parameters for the experimental drift velocities in the 
-$\langle111\rangle$ and $\langle 100 \rangle$ directions 
-(taken from Ref.~\cite{bart}).} 
+\begin{table}[htpb]
+\centering
+\caption{Parameters for the experimental drift velocities in the
+$\langle111\rangle$ and $\langle 100 \rangle$ directions
+(taken from Ref.~\cite{bart}).}
 \label{t:pars}
-\begin{tabular*}{0.8\linewidth}{ccccccc}\hline\hline 
-Reference & Carrier & Direction & $\mu_{0} \left[ \frac{\mbox{cm}^{2}}{\mbox{V}\cdot\mbox{s}} \right]$ & $E_{0} \left[ \frac{\mbox{V}}{\mbox{mm}} \right]$ & $\beta$ & $\mu_{n} \left[ \frac{\mbox{cm}^{2}}{\mbox{V}\cdot\mbox{s}} \right]$ \\\hline 
-& Electrons & $\langle111\rangle$ & 40180 & 49.3 & 0.72 & 589 \\ 
-Ref.~\cite{miha}& & $\langle100\rangle$ & 42420 & 25.1 & 0.87 & 62\\ 
-& Holes & $\langle111\rangle$ & 107270 & 10.0 & 0.58 & 0 \\ 
-& & $\langle100\rangle$ & 66333 & 18.1 & 0.744 & 0 \\\hline 
-& Electrons & $\langle111\rangle$ & 38536 & 53.8 & 0.641 & 510 \\ 
-Ref.~\cite{bart}& & $\langle100\rangle$ & 38609 & 51.1 & 0.805 & -171\\  
-& Holes & $\langle111\rangle$ & 61215 & 18.2 & 0.662 & 0 \\ 
-& & $\langle100\rangle$ & 61824 & 18.5 & 0.942 & 0 \\\hline\hline 
-\end{tabular*} 
-\end{table*} 
+\begin{tabular}{cccccc}
+\hline\noalign{\smallskip}
+Ref. & Carrier & Axis &
+$\mu_{0} \left[\frac{\mbox{cm}^{2}}{\mbox{V}\cdot\mbox{s}}\right]$ &
+$\mathcal{E}_{0}\left[\frac{\mbox{V}}{\mbox{mm}}\right]$ & $\beta$\\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+
+\multirow{2}{*}{\cite{miha}}&\multirow{2}{*}{$e$} &
+$\langle111\rangle$ & 42420 & 25.1 & 0.87 \\
+& & $\langle100\rangle$ & 40180 & 49.3 & 0.72 \\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+
+\multirow{2}{*}{\cite{reg}}&\multirow{2}{*}{$h$} &
+$\langle111\rangle$ & 107270 & 10.0 & 0.580 \\
+& & $\langle100\rangle$ & 66333 & 18.1 & 0.744 \\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+
+\multirow{4}{*}{\cite{bart}}&\multirow{2}{*}{$e$} &
+$\langle111\rangle$ & 38536 & 53.8 & 0.641 \\
+& & $\langle100\rangle$ & 38609 & 51.1 & 0.805 \\
+\noalign{\smallskip}\cline{2-6}\noalign{\smallskip}
+
+&\multirow{2}{*}{$h$} & $\langle111\rangle$ & 61215 & 18.2 & 0.662 \\ 
+& & $\langle100\rangle$ & 61824 & 18.5 & 0.942 \\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+\end{tabular} 
+\end{table}
  
-Figure~\ref{f:vvse} shows the drift velocities of electrons (a, c) and
-holes (b, d) along the principal crystal axes as functions of electric
-field in the range of [7,500]~V/mm. The drift velocities along the
-$\langle 100 \rangle$ and $\langle 111 \rangle$ axes were calculated
-according to Eq.~\ref{e:para}. The input parameters provided in
-Ref.~\cite{miha} (\cite{bart}) were used for Fig.~\ref{f:vvse}a and b
-(c and d).  The drift velocity in any direction can be derived from
-the velocities along the $\langle 100 \rangle$ and $\langle 111
-\rangle$ axes.  The details of the calculation are described in the
-following sections.
- 
-\begin{figure*}\centering
+\begin{figure*}[htpb]
+\centering
 \includegraphics[width=0.8\linewidth]{VvsElucian} 
 \includegraphics[width=0.8\linewidth]{VvsEbart} 
 \caption{Drift velocities of electrons (a, c) and holes (b, d) along
-the principal crystal axes as functions of electric field in the range
-of [7,500]~V/mm. Velocities along the axes $\langle 100 \rangle$ and
-$\langle 111 \rangle$ were calculated according to Eq.~\ref{e:para}:
-(a) and (b), the input parameters provided in Ref.~\cite{miha} were
-used; (c) and (d), the input parameters provided in Ref.~\cite{bart}
-were used. The velocities along the $\langle 110 \rangle$ axis are
-predicted according sections~\ref{s:elec} and~\ref{s:hole}.}
+the principal crystal axes as functions of electric field. Velocities
+along the axes $\langle 100 \rangle$ and $\langle 111 \rangle$ are
+calculated according to Eq.~\ref{e:para}: (a) and (b), the input
+parameters provided in \cite{miha} and \cite{reg} are used; (c) and
+(d), the input parameters provided in \cite{bart} are used. The
+velocities along the $\langle 110 \rangle$ axis are predicted
+according to Sect.~\ref{s:elec} and~\ref{s:hole}.}
 \label{f:vvse} 
 \end{figure*} 
- 
+
 \subsubsection{Coordinate systems} 
 \label{s:xyz}
 Two different coordinate systems are important for the
 calculation. The first one is defined by the crystal axes $\langle 100
 \rangle$, $\langle 010 \rangle$ and $\langle 001 \rangle$. The second
-one, indicated as $xyz$ in Fig~\ref{f:coo}, is used in Geant4. The
-cylindrical detectors are produced with their geometrical middle axis,
-$z$, aligned to the crystal axis $\langle 001 \rangle$. The
-transformation between the two coordinate system, hence, only depends
-on the angle between the $\langle 110 \rangle$ and the y-axis,
-$\phi_{110}$.
-\begin{figure}\centering
-\includegraphics[width=0.6\linewidth]{coordins}   
-\caption{The relation between the coordinates $xyz$ used in Geant4 and
-the crystal axes $\langle 100 \rangle$, $\langle 010 \rangle$ and
-$\langle 001 \rangle$.}
+one, indicated as $xyz$ in Fig.~\ref{f:model} and \ref{f:coo}, is used
+in Geant4 simulation. The cylindrical detectors are produced with
+their geometrical middle axis, $z$, aligned to the crystal axis
+$\langle 001 \rangle$. The transformation between the two coordinate
+system, hence, only depends on the angle between the $\langle 110
+\rangle$ and the y-axis, $\phi_{110}$.
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.55\linewidth]{coordins}
+\caption{The relation between the coordinates $xyz$ used in Geant4
+simulation and the crystal axes $\langle 100 \rangle$, $\langle 010
+\rangle$ and $\langle 001 \rangle$.}
 \label{f:coo} 
 \end{figure} 
  
 \subsubsection{Electron drift velocity} 
-\label{sec:pss:elec} 
-The conduction band in a germanium crystal reaches its minimal
-potential in regions around the four equivalent $\langle 111 \rangle$
-axes. The equipotential surfaces in these regions have ellipsoidal
-shapes as shown in Fig~\ref{f:valley}.
-\begin{figure}\centering
+\label{s:elec} 
+The model used to calculate the electron drift velocity in any
+direction is taken from \cite{miha} and references therein. The basic
+idea is summarized as follows: the conduction band in a germanium
+crystal reaches its minimal potential in regions around the four
+equivalent $\langle 111 \rangle$ axes, the equipotential surfaces in
+these regions have ellipsoidal shapes as shown in Fig~\ref{f:valley};
+free electrons can easily populate in these regions, or valleys in the
+conduction band, and strongly accelerated by the electric field
+applied, the probability density of conduction band electrons in other
+regions is very small and can be ignored.
+\begin{figure}[htpb]
+\centering
 \includegraphics[width=0.6\linewidth]{valleys}   
 \caption{Minimal potential regions in the conduction band along four
 equivalent $\langle 111 \rangle$ axes, where the probability density
 of electrons is dominant (taken from Ref.~\cite{bart}).}
 \label{f:valley} 
 \end{figure} 
-These regions are characterized by valleys in the conduction band
-which can easily be populated by free electrons. The electrons have a
-high mobility and are strongly accelerated by the electric field
-applied.  The probability density of conduction band electrons in
-other regions is very small. If it is neglected, the dependence of the
-electron drift velocity $\mathbf{v}_{e}$ on the applied electric field
-$\mathbf{E}$ can be written as
+
+Under these assumptions the dependence of the electron drift velocity
+$\vec{v}_{e}$ on the applied electric field $\vec{E}$ can be written
+as
 \begin{equation} 
 \label{e:ed} 
-\mathbf{v}_{e}(\mathbf{E}) = \mathcal{A}(E) \sum_{j} \frac{n_{j}}{n} 
-\frac{\gamma_{j}\mathbf{E_{0}}}
-{\sqrt{\mathbf{E_{0}}^{T}\gamma_{j}\mathbf{E_{0}}}}, 
-\mbox{ with } j=1,2,3,4, 
+\vec{v}_{e}(\vec{E}) = \mathcal{A}(E) \sum_{j} \frac{n_{j}}{n} 
+\frac{\gamma_{j}\vec{E_{0}}}
+{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}, 
+(j=1,2,3,4),
 \end{equation} 
-where the coefficient $\mathcal{A}$ is a function of $E=|\mathbf{E}|$
-and the temperature; $\mathbf{E_{0}}$ is the normalized electric field
-vector; $n_{j}/n$ is the fraction of the carriers (in this case,
-electrons) in the $j$-th $\langle 111 \rangle$ valley and $\gamma_{j}$
-is the effective mass tensor for the electrons in the $j$-th $\langle
-111 \rangle$ valley. Local coordinates, $x^{\prime} y^{\prime}
-z^{\prime}$, are defined as shown in Fig.~\ref{f:axes}. The effective
-mass tensor, $\gamma_{0}$, in $x^{\prime} y^{\prime} z^{\prime}$
-coordinates has a very simple expression:
+where the coefficient $\mathcal{A}$ is a function of $E = |\vec{E}|$;
+$\vec{E_{0}}$ is the normalized electric field vector; $n_{j}/n$ is
+the fraction of electrons in the $j$-th $\langle 111 \rangle$ valley
+and $\gamma_{j}$ is the effective mass tensor for the electrons in the
+$j$-th $\langle 111 \rangle$ valley. 
+
+Local coordinates, $x^{\prime} y^{\prime} z^{\prime}$, in the valleys
+are defined as shown in Fig.~\ref{f:axes}. The effective mass tensor,
+$\gamma_{0}$, in $x^{\prime} y^{\prime} z^{\prime}$ coordinates has a
+very simple expression:
 \begin{equation} 
 \label{e:g0} 
 \gamma_{0} \equiv \left( 
@@ -364,11 +402,23 @@ m_{t}^{-1} & 0 & 0 \\
 \end{equation} 
 where $m_{t} = 1.64m_{e}$ is the transverse effective electron mass
 and $m_{l} = 0.0819m_{e}$ is the longitudinal effective electron mass,
-with $m_{e}$ denoting the free electron mass. Since it is convenient
-to simulate the interactions and the pulse shape development in the
-$xyz$ coordinates, the expression of the mass tensor has to be
-transformed from $x^{\prime} y^{\prime} z^{\prime}$ to $xyz$
-coordinates:
+with $m_{e}$ denoting the free electron mass. 
+ 
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.7\linewidth]{axes}   
+\caption{Relation between the local coordinates
+$x^{\prime}y^{\prime}z^{\prime}$ in one of the four ellipsoidal
+regions with conduction band valleys and the Geant4 coordinates
+$xyz$. The $x^{\prime}$ axis is perpendicular to the plane defined by
+$\langle111\rangle$ and $\langle001\rangle$.}
+\label{f:axes} 
+\end{figure} 
+
+Since it is convenient to simulate the interactions and the pulse
+shape development in the $xyz$ coordinates, the expression of the mass
+tensor has to be transformed from $x^{\prime} y^{\prime} z^{\prime}$
+to $xyz$ coordinates:
 \begin{equation} 
 \label{e:gs} 
 \gamma_{j} = R_{j}^{-1}\gamma_{0}R_{j} = R_{j}^{T}\gamma_{0}R_{j}, 
@@ -380,52 +430,36 @@ R_{j} = R_{x^{\prime}}(\arccos(\sqrt{2/3}))R_{z}(\phi_{110}+(j-1)\pi/2)
 \end{equation} 
 is the rotation matrix which aligns one of the four $\langle 111
 \rangle$ axes to the y-axis. $R_a(\alpha)$ indicates a
-counter-clockwise rotation around the axis~$a$ with rotation
-angle~$\alpha$.
+counter-clockwise rotation\footnote{defined as looking along the
+axis.} around the axis~$a$ with rotation angle~$\alpha$.
  
-\begin{figure}\centering
-\includegraphics[width=0.8\linewidth]{axes}   
-\caption{Relation between the local coordinates
-$x^{\prime}y^{\prime}z^{\prime}$ in one of the four ellipsoidal
-regions with conduction band valleys and the Geant4 coordinates
-$xyz$. The $x^{\prime}$ axis is perpendicular to the plane defined by
-$\langle111\rangle$ and $\langle001\rangle$.}
-\label{f:axes} 
-\end{figure} 
- 
-The deviation from an equal population, namely, $n_{e}/n$=1/4, of
-electrons is assumed to depend on the electric field like:
+The deviation from an equal population ($n_{e}/n$=1/4) of electrons is
+assumed to depend on the electric field like:
 \begin{equation} 
 \label{e:nion} 
-\frac{n_{j}}{n} = \mathcal{R}(E) 
-\left[ \frac{\sqrt{\mathbf{E_{0}}^{T}\gamma_{j}\mathbf{E_{0}}}}
-{\sum_{i}\sqrt{\mathbf{E_{0}}^{T}\gamma_{i}\mathbf{E_{0}}}} - 
-\frac{n_{e}}{n} \right] + \frac{n_{e}}{n},  
+\frac{n_{j}}{n} = \frac{n_{e}}{n} + \mathcal{R}(E) 
+\left[ \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}
+{\sum_{i}\sqrt{\vec{E_{0}}^{T}\gamma_{i}\vec{E_{0}}}} - 
+\frac{n_{e}}{n} \right],  
 \end{equation} 
-where the coefficient $\mathcal{R}$ is a function of $E=|\mathbf{E}|$
-and the temperature.
+where the coefficient $\mathcal{R}$ is a function of $E=|\vec{E}|$.
  
-An electric field applied along the $\langle 100 \rangle$ direction,
-namely, $\mathbf{E_{0}} = (\sqrt{1/2}, \sqrt{1/2}, 0)^{T}$ in $xyz$
-coordinates affects the population of the electrons in all $\langle
-111 \rangle$ valleys equally, hence $n_{1}/n = n_{2}/n = n_{3}/n =
-n_{4}/n = 1/4$. Using the drift velocity $v_{e}^{100}(E)$ according to
-Eq.~\ref{e:para}, the absolute value of $\mathcal{A}(E)$ can be
-expressed as
+An electric field applied along the $\langle 100 \rangle$ direction
+affects the population of the electrons in all $\langle 111 \rangle$
+valleys equally, hence $n_{j}/n = 1/4$. Using the drift velocity
+$v_{e}^{100}(E)$ given by Eq.~\ref{e:para}, the absolute value of
+$\mathcal{A}(E)$ can be expressed as
 \begin{equation} 
 \label{e:ae} 
 |\mathcal{A}(E)| = \frac{v_{e}^{100}(E)}  
-{\displaystyle \sum_{j} \frac{1}{4} \frac{\gamma_{j}\mathbf{E_{0}}}
-{\sqrt{\mathbf{E_{0}}^{T}\gamma_{j}\mathbf{E_{0}}}}}, \mbox{ with } 
-\mathbf{E_{0}} = \left( \begin{array}{c}  
-\sqrt{1/2}\\\sqrt{1/2}\\0 \end{array} \right). 
-\end{equation} 
+{\displaystyle \sum_{j} \frac{1}{4} \frac{\gamma_{j}\vec{E_{0}}}
+{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}}, 
+\end{equation}
+with $\vec{E_{0}}$ parallel to $\langle 100 \rangle$.
  
 If the electric field vector is oriented along one of the four
-$\langle 111 \rangle$ axes, namely, $\mathbf{E_{0}} = (0, \sqrt{2/3},
-\sqrt{1/3})^{T}$ in $xyz$ coordinates, there is an uniform population
-of the electrons among the other three $\langle 111 \rangle$ axes,
-namely,
+$\langle 111 \rangle$ axes, there is an uniform population of the
+electrons among the other three $\langle 111 \rangle$ axes, namely,
 \begin{equation} 
 \label{e:n111} 
 \frac{n_{2}}{n} = \frac{n_{3}}{n} = \frac{n_{4}}{n}. 
@@ -440,37 +474,38 @@ we have
 \label{e:n12} 
 \frac{n_{1}}{n} + 3\frac{n_{2}}{n}= 1. 
 \end{equation} 
-Using the drift velocity $v_{e}^{111}(E)$ for an applied electric
-field $E$ in the $\langle 111 \rangle$ direction at a specific
-temperature according to Eq.~\ref{e:para}, another relation between
-$n_{1}/n$ and $n_{2}/n$ is obtained:
+Using the drift velocity $v_{e}^{111}(E)$ given by Eq.~\ref{e:para},
+another relation between $n_{1}/n$ and $n_{2}/n$ is obtained:
 \begin{equation} 
 \label{e:n12p} 
 v_{e}^{111}(E) =  \mathcal{A}(E) 
-\left( \frac{n_{1}}{n} \frac{\gamma_{1}\mathbf{E_{0}}} 
-{\sqrt{\mathbf{E_{0}}^{T}\gamma_{1}\mathbf{E_{0}}}} +  
-3\frac{n_{2}}{n} \frac{\gamma_{2}\mathbf{E_{0}}}         
-{\sqrt{\mathbf{E_{0}}^{T}\gamma_{2}\mathbf{E_{0}}}} \right). 
-\end{equation} 
-The values of $n_{1}/n$ and $n_{2}/n$ can be obtained by solving the
-equations \ref{e:n12} and \ref{e:n12p}. Then $\mathcal{R}(E)$ can be
-calculated as
+\left( \frac{n_{1}}{n} \frac{\gamma_{1}\vec{E_{0}}} 
+{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}} +  
+3\frac{n_{2}}{n} \frac{\gamma_{2}\vec{E_{0}}}         
+{\sqrt{\vec{E_{0}}^{T}\gamma_{2}\vec{E_{0}}}} \right), 
+\end{equation}
+with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$. The values of
+$n_{1}/n$ and $n_{2}/n$ can be obtained by solving Eq.~\ref{e:n12} and
+\ref{e:n12p}. Then $\mathcal{R}(E)$ can be calculated as
 \begin{equation} 
 \label{e:re} 
-\mathcal{R}(E) = \left( \frac{n_{1}}{n} - \frac{n_{e}}{n} \right) / 
-\left( \frac{\sqrt{\mathbf{E_{0}}^{T}\gamma_{1}\mathbf{E_{0}}}} 
-{\sum_{j}\sqrt{\mathbf{E_{0}}^{T}\gamma_{j}\mathbf{E_{0}}}} - 
-\frac{n_{e}}{n} \right), \mbox{ with } 
-\mathbf{E_{0}} = \left( \begin{array}{c}  
-0\\ \sqrt{2/3}\\\sqrt{1/3} \end{array} \right). 
+\mathcal{R}(E) = \frac{n_{1}/n - n_{e}/n}
+{\displaystyle \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}}
+{\sum_{j}\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}} - 
+\frac{n_{e}}{n}},
 \end{equation} 
- 
+with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$.
+
+Since the values of $\mathcal{A}$ and $\mathcal{R}$ are independent of
+$\phi_{110}$, $\phi_{110}$ can be set to zero during the determination
+of $\mathcal{A}$ and $\mathcal{R}$ so that the calculation can be
+simplified.
+
 After the determination of the coefficients $\mathcal{A}$ and
 $\mathcal{R}$ the drift velocity can be calculated for any direction
-and any strength of the electric field. Figures~\ref{f:vvse}a and c
-present the calculated electron drift velocities along the $\langle
-110 \rangle$ axis. The velocities are between the ones for the other
-axes.
+and any strength of the electric field. The dotted lines in
+Fig.~\ref{f:vvse}a and c present the calculated electron drift
+velocities along the $\langle 110 \rangle$ axis as an example.
  
 \subsubsection{Hole drift velocity} 
 \label{s:hole} 
@@ -483,16 +518,17 @@ emit an optical phonon and lose most of its energy, after which
 acceleration in the field direction resumes and a new cycle starts.
  
 The probability of finding a heavy hole in a specific momentum state
-$\mathbf{k}$ is maximal in the direction parallel to the electric
-field. The mean wave vector $\mathbf{k}_{0}(k_{0}, \theta_{0},
+$\vec{k}$ is maximal in the direction parallel to the electric
+field. The mean wave vector $\vec{k}_{0}(k_{0}, \theta_{0},
 \phi_{0})$ is then assumed to be aligned with the electric field
-$\mathbf{E}(E, \theta, \phi)$, namely, $\theta_{0} = \theta,
+$\vec{E}(E, \theta, \phi)$, namely, $\theta_{0} = \theta,
 \phi_{0} = \phi$, where $\theta, \phi$ are the polar and azimuthal
 angles with respect to the coordinate system defined by the $\langle
 100 \rangle$, $\langle 010 \rangle$ and $\langle 001 \rangle$ axes as
 shown in Fig.~\ref{f:vsphere}.
  
-\begin{figure}\centering
+\begin{figure}[htpb]
+\centering
 \includegraphics[width=0.8\linewidth]{vsphere}   
 \caption{Relation between the crystal axes $\langle100\rangle$,
 $\langle010\rangle$ and $\langle001\rangle$, and the coordinates $xyz$
@@ -502,7 +538,7 @@ $x^{\prime}y^{\prime}z^{\prime}$.}
 \end{figure} 
  
 The three components $(v_{x^{\prime}}, v_{y^{\prime}},
-v_{z^{\prime}})^{T}$ of the hole drift velocity $\mathbf{v}$ in the
+v_{z^{\prime}})^{T}$ of the hole drift velocity $\vec{v}$ in the
 local coordinates, $x^{\prime}y^{\prime}z^{\prime}$, at any position
 $(r, \theta, \phi)$ (as shown in Fig.~\ref{f:vsphere}) can be
 expressed as:
@@ -536,7 +572,7 @@ anisotropies, $\Lambda$ and $\Omega$, can be expressed as
 \end{equation} 
  
 The three components $(v_{x}, v_{y}, v_{z})^{T}$ of the hole drift
-velocity $\mathbf{v}$ in $xyz$ coordinate (as shown in
+velocity $\vec{v}$ in $xyz$ coordinate (as shown in
 Fig.~\ref{f:vsphere}) become:
 \begin{equation} 
 \label{e:v2v}   
@@ -550,30 +586,29 @@ v_{x^{\prime}} \\ v_{y^{\prime}} \\ v_{z^{\prime}}
 \end{array} \right), 
 \end{equation} 
 where $R_a(\alpha)$ indicates the counter-clockwise rotation around
-the axes $a$ by the angle $\alpha$.  Figures~\ref{f:vvse}b and d
-present the calculated hole drift velocities along the $\langle 110
-\rangle$ axis. The velocities are between the ones along the other
-axes.
+the axes $a$ by the angle $\alpha$. The dotted lines in
+Fig.~\ref{f:vvse}b and d present the calculated hole drift velocities
+along the $\langle 110 \rangle$ axis as an example.
 
-\subsection{Drift trajectories} 
+\subsubsection{Drift trajectories} 
 \label{s:trj} 
 The trajectories are calculated iteratively.  The displacement vector
-$\Delta \mathbf{r}$ by which a charge carrier drifts within a short
+$\Delta \vec{r}$ by which a charge carrier drifts within a short
 time interval $\Delta t$ can be calculated once the drift velocity
-vector $\mathbf{v}_{i}$ in the original position $\mathbf{r}_{i}$ is
+vector $\vec{v}_{i}$ in the original position $\vec{r}_{i}$ is
 calculated using the method described in the previous two sections.
-The new position $\mathbf{r}_{i+1}$ is then
+The new position $\vec{r}_{i+1}$ is then
 \begin{equation} 
 \label{e:pos} 
-\mathbf{r}_{i+1} = \mathbf{r}_{i} + \Delta \mathbf{r} \ \ 
+\vec{r}_{i+1} = \vec{r}_{i} + \Delta \vec{r} \ \ 
 (i=0,1,...), \mbox{ with } 
-\Delta \mathbf{r} = \mathbf{v}_{i} \Delta t. 
+\Delta \vec{r} = \vec{v}_{i} \Delta t. 
 \end{equation} 
 The iteration continues until the charge carriers reach the boundary
-of the crystal. The series of position vectors $\mathbf{r}_{i}$ from
-$\mathbf{r}_{0}$ to $\mathbf{r}_{\mbox{boundary}}$, $(\mathbf{r}_{0},
-\mathbf{r}_{1}, ..., \mathbf{r}_{i}, ...,
-\mathbf{r}_{\mbox{boundary}})$, represents the trajectory.
+of the crystal. The series of position vectors $\vec{r}_{i}$ from
+$\vec{r}_{0}$ to $\vec{r}_{\mbox{boundary}}$, $(\vec{r}_{0},
+\vec{r}_{1}, ..., \vec{r}_{i}, ...,
+\vec{r}_{\mbox{boundary}})$, represents the trajectory.
  
 Two different numerical methods were used to calculate the trajectory,
 the Euler method and the 4$^{th}$ Runge-Kutta method.  The Euler
@@ -618,8 +653,6 @@ The weighting fields and potentials are calculated in the same way to
 determine the signals induced in the electrodes using Shockley-Ramo's
 Theorem \cite{Gat82,Rad88,He00}.
 
-\subsection{Raw pulse shapes} 
-\label{s:ps} 
 Once the weighting fields and potentials as well as the drift
 velocities and trajectories of the charge carriers are known,
 Eq.~\ref{e:ramoq} and \ref{e:ramoi} introduced in Sec.~\ref{s:ramo}
@@ -908,12 +941,18 @@ Nucl. Instr. Meth. A \textbf{506} (2003) 250.
 Trans. Nucl. Sci. \textbf{53} (2006) 207.
 % MaGe paper
 \bibitem{MaGe}Y. Chan \textit{et al.}, arXiv:0802.0860v1 [nucl-ex].
-
-\bibitem{igex}D. Gonz\'alez \textit{et al.}, Nucl. Instr. Meth. A \textbf{515} (2003) 634.
-\bibitem{Kno99}G. F. Knoll, \textit{Radiation of Detection and Measurement} (third ed.), Wiley, New York (1999).
-\bibitem{miha}L. Mihailescu \textit{et al.}, Nucl. Instr. Meth. A \textbf{447} (2000) 350.
-\bibitem{otta}G. Ottaviani \textit{et al.}, IEEE Trans. Nucl. Sci. \textbf{NS-22} (1975) 192.
-\bibitem{bart}B. Bruyneel \textit{et al.}, Nucl. Instr. Meth. A \textbf{569} (2006) 764.% see Bru06
+% mobility as a function of E
+\bibitem{Kno99}G. F. Knoll, \textit{Radiation of Detection and
+Measurement} third ed., (Wiley, New York 1999) 423.
+% e drift
+\bibitem{miha}L. Mihailescu \textit{et al.}, Nucl. Instr. Meth. A
+\textbf{447} (2000) 350.
+% h drift
+\bibitem{reg}L. Reggiani \textit{et al.}, Phys. Rev. B \textbf{16}
+(1977) 2781.
+% e and h drift
+\bibitem{bart}B. Bruyneel \textit{et al.}, Nucl. Instr. Meth. A
+\textbf{569} (2006) 764.
 
 \end{thebibliography}
 %
