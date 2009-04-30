@@ -8,8 +8,8 @@
 %
 \begin{document}
 %
-\title{Validation of pulse shape simulation for true coaxial segmented
-n-type germanium detectors, I}
+\title{Pulse shape simulation for true coaxial segmented n-type
+germanium detectors, I}
 %
 \author{I.~Abt \and A.~Caldwell \and D.~Lenz \and J.~Liu \and
 B.~Majorovits}
@@ -195,6 +195,12 @@ convenient to use cylindrical coordinates, $r, \phi, z$:
 where $\varphi$ and $\rho$ are functions of $r, \phi, z$;
 $\epsilon_{0}$ and $\epsilon_{R}$ are the dielectric constants in
 vacuum and germanium, respectively.
+
+Since the electric field does not change during the simulation, it is
+calculated before the simulation and saved into a binary file. When
+needed the file can be read in, and the electric field at any position
+inside the detector can be calculated by interpolating from the
+closest grid points.
  
 The electric field distribution inside the germanium crystal is quite
 sensitive to the impurity density. Figure~\ref{f:rho} shows the
@@ -510,22 +516,16 @@ velocities along the $\langle 110 \rangle$ axis as an example.
 \subsubsection{Hole drift velocity} 
 \label{s:hole} 
 The model used to calculate the hole drift velocity is taken from
-Ref.~\cite{bart}. In this model only the \emph{heavy hole valence
-band} is responsible for the anisotropy of the mobility. All other
-effects are neglected. A hole is accelerated by the electric field
-until its energy becomes 0.037~eV. At this point it is very likely to
-emit an optical phonon and lose most of its energy, after which
-acceleration in the field direction resumes and a new cycle starts.
- 
-The probability of finding a heavy hole in a specific momentum state
-$\vec{k}$ is maximal in the direction parallel to the electric
-field. The mean wave vector $\vec{k}_{0}(k_{0}, \theta_{0},
-\phi_{0})$ is then assumed to be aligned with the electric field
-$\vec{E}(E, \theta, \phi)$, namely, $\theta_{0} = \theta,
-\phi_{0} = \phi$, where $\theta, \phi$ are the polar and azimuthal
-angles with respect to the coordinate system defined by the $\langle
-100 \rangle$, $\langle 010 \rangle$ and $\langle 001 \rangle$ axes as
-shown in Fig.~\ref{f:vsphere}.
+Ref.~\cite{bart} and the references therein. The basic assumptions in
+this model are, that only the \emph{heavy hole valence band}
+\cite{heavy} is responsible for the anisotropy of the mobility, all
+other effects are neglected, and that the mean wave vector
+$\vec{k}_{0}(k_{0}, \theta_{0}, \phi_{0})$ of heavy holes is aligned
+with the electric field $\vec{E}(E, \theta, \phi)$, namely,
+$\theta_{0} = \theta, \phi_{0} = \phi$, where $\theta, \phi$ are the
+polar and azimuthal angles with respect to the coordinate system
+defined by the $\langle 100 \rangle$, $\langle 010 \rangle$ and
+$\langle 001 \rangle$ axes as shown in Fig.~\ref{f:vsphere}.
  
 \begin{figure}[htpb]
 \centering
@@ -537,43 +537,37 @@ $x^{\prime}y^{\prime}z^{\prime}$.}
 \label{f:vsphere} 
 \end{figure} 
  
-The three components $(v_{x^{\prime}}, v_{y^{\prime}},
-v_{z^{\prime}})^{T}$ of the hole drift velocity $\vec{v}$ in the
-local coordinates, $x^{\prime}y^{\prime}z^{\prime}$, at any position
-$(r, \theta, \phi)$ (as shown in Fig.~\ref{f:vsphere}) can be
-expressed as:
-\begin{equation} 
+Under these assumptions the three components of the hole drift
+velocity $\vec{v}$ in the local coordinates, $x^{\prime} y^{\prime}
+z^{\prime}$, at any position $(r, \theta, \phi)$ can be expressed as:
+\begin{eqnarray*} 
 \label{e:vsphere} 
-\begin{array}{rcl} 
-v_{x^{\prime}} = v_{r} &=& v^{100}_{h}(E)
+v_{x^{\prime}} &=& v^{100}_{h}(E)
 [1-\Lambda(k_{0})(\sin(\theta)^{4}\sin(2\phi)^{2} + \sin(2\theta)^{2})],\\ 
-v_{y^{\prime}} = v_{\theta} &=& v^{100}_{h}(E)\Omega(k_{0})
+v_{y^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})
 [2\sin(\theta)^{3}\cos(\theta)\sin(2\phi)^{2} + \sin(4\theta)],\\ 
-v_{z^{\prime}} = v_{\phi} &=& v^{100}_{h}(E)\Omega(k_{0})\sin(\theta)^{3}\sin(4\phi), 
-\end{array} 
-\end{equation} 
-The mean wave number $k_{0}$ can be expressed as a function of
-$v_{rel} = v^{111}_{h}(E)/v^{100}_{h}(E)$:
-\begin{equation} 
-\label{e:k0} 
-k_{0}(v_{rel}) = 9.2652 - 26.3467v_{rel} + 29.6137v_{rel}^{2} - 12.3689v_{rel}^{3}, 
-\end{equation} 
-where $v^{111}_{h}(E)$ and $v^{100}_{h}(E)$ are the drift velocities
-along the $\langle111\rangle$ and $\langle100\rangle$ axes. They can
-be calculated using Eq.~\ref{e:para}. The magnitude of the
-anisotropies, $\Lambda$ and $\Omega$, can be expressed as
-\begin{equation} 
+v_{z^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})\sin(\theta)^{3}\sin(4\phi), 
+\end{eqnarray*} 
+where $v^{111}_{h}$ and $v^{100}_{h}$ are the drift velocities along
+the $\langle 111 \rangle$ and $\langle 100 \rangle$ axes which can be
+calculated using Eq.~\ref{e:para}, and $\Lambda$ and $\Omega$,
+governing the longitudinal and transverse anisotropy of the drift, can
+be expressed as
+\begin{eqnarray*} 
 \label{e:lamb} 
-\Lambda(k_{0}) = -0.01322k_{0} + 0.41145k_{0}^{2} - 0.23657k_{0}^{3} + 0.04077k_{0}^{4}, 
-\end{equation} 
-\begin{equation} 
-\label{e:ome} 
-\Omega(k_{0}) = 0.006550k_{0} - 0.19946k_{0}^{2} + 0.09859k_{0}^{3} - 0.01559k_{0}^{4}. 
-\end{equation} 
+\Lambda(k_{0}) &=& -0.01322k_{0} + 0.41145k_{0}^{2} - 0.23657k_{0}^{3} + 0.04077k_{0}^{4},\\
+\Omega(k_{0}) &=& 0.006550k_{0} - 0.19946k_{0}^{2} + 0.09859k_{0}^{3} - 0.01559k_{0}^{4}. 
+\end{eqnarray*} 
+The mean wave number $k_{0}$ can be expressed as a function of
+$v_{r} = v^{111}_{h}(E)/v^{100}_{h}(E)$:
+\begin{eqnarray*} 
+\label{e:k0} 
+k_{0}(v_{r}) = 9.2652 - 26.3467v_{r} + 29.6137v_{r}^{2} - 12.3689v_{r}^{3}. 
+\end{eqnarray*} 
  
-The three components $(v_{x}, v_{y}, v_{z})^{T}$ of the hole drift
-velocity $\vec{v}$ in $xyz$ coordinate (as shown in
-Fig.~\ref{f:vsphere}) become:
+The same as electrons the expression of the hole drift velocity in the
+local coordinates $x^{\prime} y^{\prime} z^{\prime}$ has to be
+transformed to the $xyz$ coordinates: 
 \begin{equation} 
 \label{e:v2v}   
 \left( 
@@ -584,19 +578,18 @@ v_{x} \\ v_{y} \\ v_{z}
 \begin{array}{c} 
 v_{x^{\prime}} \\ v_{y^{\prime}} \\ v_{z^{\prime}} 
 \end{array} \right), 
-\end{equation} 
-where $R_a(\alpha)$ indicates the counter-clockwise rotation around
-the axes $a$ by the angle $\alpha$. The dotted lines in
-Fig.~\ref{f:vvse}b and d present the calculated hole drift velocities
-along the $\langle 110 \rangle$ axis as an example.
+\end{equation}
+The hole drift velocities along the $\langle 110 \rangle$ axis are
+calculated as an example, and are shown as the dotted lines in
+Fig.~\ref{f:vvse}b and d.
 
 \subsubsection{Drift trajectories} 
 \label{s:trj} 
-The trajectories are calculated iteratively.  The displacement vector
-$\Delta \vec{r}$ by which a charge carrier drifts within a short
-time interval $\Delta t$ can be calculated once the drift velocity
-vector $\vec{v}_{i}$ in the original position $\vec{r}_{i}$ is
-calculated using the method described in the previous two sections.
+The drift trajectories are calculated iteratively. The displacement
+vector $\Delta \vec{r}$ by which a charge carrier drifts within a
+short time interval $\Delta t$ can be calculated once the drift
+velocity vector $\vec{v}_{i}$ in the original position $\vec{r}_{i}$
+is calculated using the method described in the previous two sections.
 The new position $\vec{r}_{i+1}$ is then
 \begin{equation} 
 \label{e:pos} 
@@ -953,7 +946,9 @@ Measurement} third ed., (Wiley, New York 1999) 423.
 % e and h drift
 \bibitem{bart}B. Bruyneel \textit{et al.}, Nucl. Instr. Meth. A
 \textbf{569} (2006) 764.
-
+\bibitem{heavy}E. M. Conwell, \textit{High field transport in
+semiconductors, Vol. 9 of Solid State Physics}, (Academic Press,
+1967).
 \end{thebibliography}
 %
 \end{document}
