@@ -5,19 +5,33 @@
 % nopac: without PACS.
 \usepackage{graphicx}
 \usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{subfig}
+\usepackage{ifpdf}
+\ifpdf
+\usepackage{epstopdf}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[pdftex,bookmarks=true,hypertexnames=false]{hyperref}
+\pdfadjustspacing=1
+\else
+\usepackage[usenames,dvips]{color}
+\usepackage[ps2pdf]{hyperref}
+\fi
 %
 \begin{document}
 %
 \title{Pulse shape simulation for true coaxial segmented n-type
 germanium detectors, I}
 %
-\author{I.~Abt \and A.~Caldwell \and D.~Lenz \and J.~Liu \and
+\author{I.~Abt \and A.~Caldwell \and
+K.~K\"oninger\thanks{\textit{Present address:} II. Physikalisches
+Institut, G\"ottingen, Germany.} \and D.~Lenz \and
+J.~Liu\thanks{e-mail: jingliu@mppmu.mpg.de} \and X.~Liu \and
 B.~Majorovits}
 %
 %\offprints{}          % Insert a name or remove this line
 %
 \institute{Max-Planck-Institut f\"ur Physik, M\"unchen, Germany}
-\mail{jingliu@mppmu.mpg.de}
 %
 \date{\today}
 %\date{Received: date / Revised version: date}
@@ -220,15 +234,15 @@ cylindrical coordinate $r$ for impurity densities between 0 and $0.9
 \end{figure} 
 
 \subsection{Drift of charge carriers} 
-\label{sec:pss:mobi} 
+\label{s:drift} 
 \subsubsection{Mobility} 
-\label{sec:pss:mobi} 
+\label{s:mobi} 
 The relation between the drift velocity of the charge carriers,
 $\vec{v}_{e}(\vec{r})$ for electrons and $\vec{v}_{h}(\vec{r})$ for
 holes, and the electric field, $\vec{E}(\vec{r})$ can be simply
 expressed as:
 \begin{equation} 
-\label{eq:det:dv}
+\label{e:dv}
 \vec{v}_{e/h} (\vec{r})= \mu_{e/h} \vec{E}(\vec{r}),
 \end{equation}
 where $\mu_{e/h}$ is called the \emph{mobility} and $\vec{r}$
@@ -585,12 +599,12 @@ Fig.~\ref{f:vvse}b and d.
 
 \subsubsection{Drift trajectories} 
 \label{s:trj} 
-The drift trajectories are calculated iteratively. The displacement
-vector $\Delta \vec{r}$ by which a charge carrier drifts within a
-short time interval $\Delta t$ can be calculated once the drift
-velocity vector $\vec{v}_{i}$ in the original position $\vec{r}_{i}$
-is calculated using the method described in the previous two sections.
-The new position $\vec{r}_{i+1}$ is then
+The development of the drift are calculated iteratively. The
+displacement vector $\Delta \vec{r}$ by which charge carriers drift
+within a short time interval $\Delta t$ can be calculated once the
+drift velocity vector $\vec{v}_{i}$ in the prior position
+$\vec{r}_{i}$ is calculated using the method described in the previous
+two sections.  The new position $\vec{r}_{i+1}$ is then
 \begin{equation} 
 \label{e:pos} 
 \vec{r}_{i+1} = \vec{r}_{i} + \Delta \vec{r} \ \ 
@@ -598,68 +612,94 @@ The new position $\vec{r}_{i+1}$ is then
 \Delta \vec{r} = \vec{v}_{i} \Delta t. 
 \end{equation} 
 The iteration continues until the charge carriers reach the boundary
-of the crystal. The series of position vectors $\vec{r}_{i}$ from
-$\vec{r}_{0}$ to $\vec{r}_{\mbox{boundary}}$, $(\vec{r}_{0},
-\vec{r}_{1}, ..., \vec{r}_{i}, ...,
-\vec{r}_{\mbox{boundary}})$, represents the trajectory.
+of the crystal, denoted as $\vec{r}_{b}$. The series of position
+vectors, $(\vec{r}_{0}, \vec{r}_{1}, ..., \vec{r}_{i}, ...,
+\vec{r}_{b})$, represents the drift trajectory.
  
-Two different numerical methods were used to calculate the trajectory,
-the Euler method and the 4$^{th}$ Runge-Kutta method.  The Euler
-method is less computer time intensive, but is also less precise.
-However, for time intervals $\Delta t < 1$~ns, the output of the two
-methods does not differ significantly.  The results presented here
-were obtained with the Runge-Kutta method.
+Two different numerical methods are implemented to calculate the
+trajectory, the Euler method and the 4$^{th}$ Runge-Kutta method. The
+former is less computer time intensive, but is also less precise.
+However, for time intervals $\Delta t \lesssim 1$~ns, the output of
+the two methods does not differ significantly. The results presented
+here are obtained with the Runge-Kutta method.
  
-Figure~\ref{f:trjs} shows the drift trajectories projected on an
-x-y cross sections of a Siegfried-like detector. The crystal axis
-$\langle 110 \rangle$ is assumed to be parallel to the x-axis
-(i.e., $\phi_{110}$ as shown in Fig.~\ref{f:coo} is set
-to zero). The left plot shows the inward drift of electrons starting
-at the outer surface of the detector. The starting points are
-distributed equidistantly on the outer circle.  The right plot shows
-the outward drift of holes starting at the inner surface.  The
-starting points are distributed equidistantly on the inner circle.
-The bias voltage was set to 3000~V. The time interval was 1~ns.  The
-time window for the calculation was 400~ns.  All electrons reach the
-inner surface within this time window, but not all holes reach the
-outer surface.  This is because electrons drift faster than holes.
-Holes drift slowest along the $\langle 110 \rangle$ direction, as also
-shown in Fig.~\ref{f:vvse}.
-\begin{figure*}\centering
+Figure~\ref{f:trjs} shows the drift trajectories projected on an x-y
+cross sections of the detector. The crystal axis $\langle 110 \rangle$
+is assumed to be parallel to the y-axis, i.e. $\phi_{110}$ as shown in
+Fig.~\ref{f:coo} is set to zero. The left plot shows the inward drift
+of electrons starting at the outer surface of the detector. The
+starting points are distributed equidistantly on the outer circle.
+The right plot shows the outward drift of holes starting at the inner
+surface. The starting points are distributed equidistantly on the
+inner circle. The bias voltage is set to 3000~V. The time interval is
+1~ns. The time window for the development of the drift is 400~ns. All
+electrons reach the inner surface within this time window, but not all
+holes reach the outer surface, demonstrating the longitudinal
+anisotropy of the drift. This is because electrons drift faster than
+holes, and holes drift slowest along the $\langle 110 \rangle$
+direction, as also shown in Fig.~\ref{f:vvse}. The trajectories along
+the crystal axes are straight because of the symmetry of the crystal
+structure. However, they are clearly bent along other directions,
+demonstrating the transverse anisotropy of the drift.
+\begin{figure*}[htbp]
+\centering
 \includegraphics[width=0.8\linewidth]{trjs} 
-\caption{Drift trajectories projected on the x-y cross sections of
-Siegfried-like detectors: Left, electrons drift inward; Right, holes
-drift outward.}
+\caption{Drift trajectories projected on the x-y cross sections of the
+detector: Left, electrons drift inward; Right, holes drift outward.}
 \label{f:trjs} 
 \end{figure*} 
  
-The trajectories along the crystal axes are straight as explained in
-Sec.~\ref{s:mobi}.  However, they are clearly bent along other
-directions.  This causes the different occupancies in different
-segments that was shown in Fig.~\ref{f:mcb}.  The crystal axis
-orientation can be deduced by comparing the occupancy distributions of
-data and MC. 
- 
-\subsection{Weighting fields and potentials}
+\subsection{Weighting potentials and fields}
 \label{s:wei}
-The weighting fields and potentials are calculated in the same way to
-determine the signals induced in the electrodes using Shockley-Ramo's
-Theorem \cite{Gat82,Rad88,He00}.
+Electric signals are induced in the electrodes of a detector by the
+cumulative influence of electrons and holes moving toward the
+electrodes. Shockley-Ramo's Theorem \cite{Gat82,Rad88,He00} can be
+used to calculate the time development of the induced charge $Q(t)$ or
+current $I(t)$ in each electrode:
+\begin{equation} 
+\label{e:ramoq}
+Q(t) = -Q_{0} \times [\varphi_{w}(\vec{r}_{h}(t)) -
+\varphi_{w}(\vec{r}_{e}(t))],
+\end{equation}
+\begin{equation} 
+\label{e:ramoi}
+I(t) = Q_{0} \times [\vec{E}_{w}(\vec{r}_{h}(t)) \cdot 
+\vec{v}_{h}(t) - \vec{E}_{w}(\vec{r}_{e}(t)) \cdot 
+\vec{v}_{e}(t)],
+\end{equation}
+where $Q_{0}$ is the electric charge carried by electrons or holes,
+$\vec{r}_{e/h}(t)$ and $\vec{v}_{e/h}(t)$ are the position and
+velocity vectors of electrons/holes as a function of time, and
+$\varphi_{w}$ and $\vec{E}_{w}$ are the so-called \emph{weighting
+potentials} and \emph{weighting fields}. 
 
-Once the weighting fields and potentials as well as the drift
-velocities and trajectories of the charge carriers are known,
-Eq.~\ref{e:ramoq} and \ref{e:ramoi} introduced in Sec.~\ref{s:ramo}
-can be used to calculate the time development of the induced charge
-$Q(t)$ and current $I(t)$ in each electrode (raw pulses in short),
-which are shown in Figure~\ref{f:pss}.
-\begin{figure*}\centering
-\includegraphics[height=0.23\textheight]{WP}
-\includegraphics[height=0.23\textheight]{CIPS}
+The weighting potentials and fields can be calculated by solving
+Poisson's equations, $\nabla^{2} \varphi = 0$ and $\nabla \cdot
+\vec{E} = 0$, respectively, with the boundary conditions that the
+potential on the electrode of interest equals to 1 and the potentials
+on all other electrodes equal to zero. Just like the electric fields,
+they are calculated before the simulation in a grid, and saved to a
+binary file for later interpolation.
+
+Figure~\ref{f:psh} shows the weighting potential of a segment with the
+indication of a photon event. Figure~\ref{f:pss} shows the raw charge
+and current pulses induced by the resulting hit in this particular
+segment, its neighboring segments and the core of the detector. The
+pulses induced in the neighboring segments are called \emph{mirror
+pulses}. The amplitude of the mirror pulse induced in one neighboring
+segment is larger than in the other, because the trajectory of the hit
+is closer to this segment.
+\begin{figure*}[htbp] 
+\centering 
+\subfloat[]{\label{f:psh} 
+\includegraphics[height=0.22\textheight]{WP}}% 
+\subfloat[]{\label{f:pss} 
+\includegraphics[height=0.22\textheight]{CIPS}}% 
 \caption{(a) weighting potential of segment B together with an
 indication of a $\gamma$ interaction. (b) Simulated charge and current
 pulses induced in segments A, B and C.}
-\label{fig:pss:ps} 
-\end{figure*}
+\label{f:ps} 
+\end{figure*} 
 
 \subsection{Effects of electronics} 
 \label{s:dbn}
@@ -677,8 +717,9 @@ of the baseline after the pulse, the limited bandwidth and the
 noise. The decay time was $5 \mu$s, the cut-off in bandwidth was
 10~MHz and the noise level was 5\% of the pulse amplitude. These
 values are worse than observed in the tests stands. They were chosen
-to clearly demonstrate influence of the effects.
-\begin{figure}
+to clearly demonstrate the effects.
+\begin{figure}[htpb]
+\centering
 \includegraphics[width=\linewidth]{PSDBN} 
 \caption{Modified pulses after folding in the decay of the baseline
 after the pulse, the limited bandwidth and the noise.}
@@ -687,51 +728,55 @@ after the pulse, the limited bandwidth and the noise.}
 
 \section{Validation of the simulation}
 \label{s:psv}
-
-The physics models \cite{miha, bart} for the drift of charge carriers
-and their measured input parameters \cite{miha, bart} alone are not
+The physics models \cite{miha,bart} for the drift of charge carriers
+and their measured input parameters \cite{miha,reg,bart} alone are not
 enough to provide a realistic pulse shape simulation. While some input
 parameters are generic to germanium, others, like the impurity density
 and the detailed properties of the surface layers, are different for
 each detector. Thus the simulation has to be tuned for each individual
 detector or at least for a series of similar detectors.
 
-Several data samples were taken with the first GERDA Phase II
-prototype detector Siegfried I (see Sec.~\ref{sec:gerda:stat3})
-operated in its test stand (see Sec.~\ref{sec:tt:comc}) to
-characterize the detector. The pulse shape simulation was verified
-using these data. The results are presented in this chapter.
-%
+Several data samples were taken with the GERDA Phase II prototype
+detectors Siegfried~I \cite{si} (and SuSie?) to characterize the
+detector. The pulse shape simulation was verified using these
+data. The results are presented in this section.
 
-\subsection{Detector characterization measurements}
+\subsection{Measurement}
 \label{s:char}
-A detailed description of the characterization of Siegfried I is
-available in Ref.~\cite{Sie07}. The data sample used to verify the
-simulation was taken as: the surfaces of segments 13, 14 and 15 (see
-Fig.~\ref{f:segm}) were scanned in $\phi$ (azimuth angle) using a
-75~kBq $^{152}$Eu source inside a copper collimator with a length of
-52~mm and a pin-hole diameter of 11~mm. The spot size on the detector
-surface was estimated to be $\approx 150$~mm$^{2}$. The distance
-between the collimator and the center of the detector was $\approx
-85$~mm. The center of the collimator was pointed at $z = 0$ (see
-Fig.~\ref{f:coo}).  The step size of the scan was 5$^{\circ}$ in
-segment 14 and 10$^{\circ}$ in segment 13 and 15. The uncertainty in
-$\phi$ is $\approx \Delta \phi=2.5^{\circ}$. In total 25~measurements
-were performed to cover 180$^{\circ}$ in azimuth. The pulses of the
-core and all segments were recorded. There were about $50\ 000$~events
-per measurement.
+The measurement was done as shown in Fig.~\ref{f:siscan}. The surfaces
+of segments 13, 14 and 15\footnote{labeled according to the channel
+number connected to the DAQ system} in the middle layer of the
+detector were scanned in azimuth angle, $\phi$\footnote{defined by the
+protractor used in the measurement} using a 75~kBq $^{152}$Eu source
+inside a copper collimator with a length of 52~mm and a pin-hole
+diameter of 11~mm. The distance between the collimator and the center
+of the detector was $\approx 85$~mm. The spot size on the detector
+surface was estimated to be $\approx 150$~mm$^{2}$. The center of the
+collimator was pointed at $z = 0$. The step size of the scan was
+5$^{\circ}$ in segment 14 and 10$^{\circ}$ in segment 13 and 15. The
+uncertainty in $\phi$ is $\approx \Delta \phi=2.5^{\circ}$. In total
+25~measurements were performed to cover 180$^{\circ}$ in azimuth. The
+pulses of the core and all segments were recorded. There were about
+$50\ 000$~events per measurement.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\linewidth]{siscan}
+\caption{Surface scan measurement using Siegfried~I.}
+\label{f:siscan}
+\end{figure}
 
 The 122~keV $\gamma$ line of the $^{152}$Eu source used in the scan
 provided the events to study the drift of electrons. Because these low
 energy photons in average do not penetrate deeply into germanium and
-most likely deposit energy locally through the photoelectric effect
-(see Sec.~\ref{s:gamma}), they create electron-hole pairs
-predominantly near the outer surface of the detector. The holes reach
-the outer surface almost immediately while the electrons have to drift
-through nearly the whole bulk of the detector until they reach the
-inner surface. Therefore, the pulse shapes are mainly determined by
-the drift of the electrons.
+most likely deposit energy locally through the photoelectric effect,
+they create electron-hole pairs predominantly near the outer surface
+of the detector. The holes reach the outer surface almost immediately
+while the electrons have to drift through nearly the whole bulk of the
+detector until they reach the inner surface. Therefore, the pulse
+shapes are mainly determined by the drift of the electrons.
 
+\subsection{Rise time comparison}
+\label{s:lon}
 To analyze the pulse shapes quantitatively the 10\%-30\% and 10\%-90\%
 risetimes of the core pulses were calculated. Figure~\ref{f:rt10}
 shows the average risetimes as a function of the azimuth angle
@@ -744,29 +789,26 @@ drift trajectories the distances covered by electrons in different
 $\phi$ angles are sightly different from each other.  However, this is
 a second-order effect. The difference of the risetimes is mainly
 caused by the different drift velocity along $r$ at different angles
-$\phi$.}
-\begin{figure*}\centering
-\includegraphics[width=0.35\linewidth]{phi_risetime1030}
-\includegraphics[width=0.35\linewidth]{phi_risetime1090}
+$\phi$.} Fits with a sine function give periods of about 90$^{\circ}$
+for the longitudinal anisotropy. This supports the model applied.
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.7\linewidth]{phi_risetime1030}
+\includegraphics[width=0.7\linewidth]{phi_risetime1090}
 \caption{Average 10\%-30\% (left) and 10\%-90\% (right) risetimes of
 the core pulses as a function of the azimuth angle $\phi$ (taken from
-Ref.~\cite{Sie07}). The dashed lines indicate the segment boundaries.}
+\cite{si}). The dashed lines indicate the segment boundaries.}
 \label{f:rt10}
-\end{figure*}
+\end{figure}
 
-Fits with a sine function (Fig.~\ref{f:rt10}) give periods of
-about 90$^{\circ}$ for the longitudinal anisotropy. This supports the
-model introduced in the previous chapter. The effect is illustrated in
-Fig.~\ref{f:trjs}. A direct comparison of the pulse shapes in
-data and simulation will follow in the next section.
-
-\subsection{Rise time comparison}
-\label{s:lon}
 Pulses induced in the core electrode by the drift of electrons
 starting at the outer surface of Siegfried I were simulated. The
-geometry, the operational voltage and the impurity density were
-implemented in the simulation according to the values listed in
-Table~\ref{t:detpar}.
+geometry and the experimental setup implemented in the simulation are
+shown in Fig.~\ref{f:model} and \ref{f:siscan}. The operational
+voltage of Siegfried~I is 3~kV. The impurity density was implemented
+in the simulation according to the values given by the detector
+manufacturer.
 
 According to the model, electrons drift slowest along the $\langle 110
 \rangle$ axes and risetimes reach their maxima. Thus,
@@ -777,11 +819,11 @@ decay time of 50~$\mu$s and a cut-off bandwidth of 37.5~MHz were
 implemented according to the specification of the electronics
 system. Electronic noise was not added to the pulse simulation to
 simplify direct comparisons with individual pulses. Several
-parameters, namely, the \emph{Amplitude}, the \emph{Time offset} and
-the \emph{Time scaling factor} of the pulse, were introduced to fit
-the shape of a simulated to a measured pulse. The time offset shifts
-the pulse while the time scaling factor stretches or squeezes the
-pulse in time.
+parameters, the \emph{Amplitude}, the \emph{Time offset} and the
+\emph{Time scaling factor} of the pulse, were introduced to fit the
+shape of a simulated to a measured pulse. The time offset shifts the
+pulse while the time scaling factor stretches or squeezes the pulse in
+time.
 
 Figure~\ref{f:s2d} shows a randomly selected core pulse and the result
 of a fit with the simulated pulse along the $\langle 110 \rangle$
@@ -790,7 +832,8 @@ the simulated pulse overestimates the pulse-length by $\approx
 20\%$. Nevertheless the $\chi^{2}$/NDF is excellent. In general a
 factor between 1 and 0.94 is expected as the simulation reflects the
 maximal risetime.
-\begin{figure}
+\begin{figure}[htbp]
+\centering
 \includegraphics[width=\linewidth]{PSs2d}
 \caption{Fit of a simulated to a measured pulse. The dots represent
 the data and their error bars indicate the noise level.}
@@ -806,7 +849,8 @@ within the resolution to eliminate events mis-recorded by the DAQ,
 correctly by the DAQ.
 \end{itemize}
 
-\begin{figure}\centering
+\begin{figure}[htbp]
+\centering
 \includegraphics[width=0.9\linewidth]{tscale280}
 \caption{Time scaling factors from the fits of the simulated to
 measured pulses taken at $\phi=280^{\circ}$.}
@@ -829,10 +873,11 @@ in Fig.~\ref{f:tsc}. The data is reasonably well described by the
 fit. However, the different values obtained for different instances of
 the $\langle 110 \rangle$ configuration indicate that the actual
 detector is more complex than assumed. One possible interpretation is
-that the impurity density given in Table~\ref{t:detpar} is an average
+that the impurity density given by the manufacturer is an average
 density and in reality varies with the azimuthal angle $\phi$.
 
-\begin{figure}
+\begin{figure}[htpb]
+\centering
 \includegraphics[width=\linewidth]{tsc}
 \caption{Mean time scaling factor (black dots) of a simulated $\langle
 110 \rangle$ pulse versus azimuth. The solid line represents a fit
@@ -845,7 +890,7 @@ The oscillation pattern expected and seen in Fig.~\ref{f:tsc} should
 disappear when the pulses are simulated for the individual angular
 configuration of the the scan points. This was done and the result is
 depicted in fig.~\ref{f:tsl}. Also given is the shifted polynomial
-from the fit to the data in fig.~\ref{f:tsc} and a straight line fit
+from the fit to the data in Fig.~\ref{f:tsc} and a straight line fit
 to the points in fig.~\ref{f:tsl}. The two lines are very close
 confirming the predictions of the model for the angular dependence of
 the rise-time. The deviations from the fitted straight line are below
@@ -853,7 +898,8 @@ the rise-time. The deviations from the fitted straight line are below
 simulated one. The overall shift relative to one is in average about
 10\% and can easily be corrected for.
 
-\begin{figure}
+\begin{figure}[htpb]
+\centering
 \includegraphics[width=\linewidth]{tsline}
 \caption{Mean time scaling factor (black dots) for pulses simulated
 for each angle individually against $\phi$. The result of a straight
@@ -864,40 +910,22 @@ Fig.~\ref{f:tsc} is overlaid for comparison.}
 
 \section{Summary}
 \label{s:sum}
-The data confirm the longitudinal and transverse anisotropies inherent
-to the model of the drift of charges carriers used to simulate pulses
-in germanium detectors.  The longitudinal anisotropy connected to the
-drift of electrons was seen in the dependence of the rise-time on the
-azimuthal angle, $\phi$, of the energy deposition. After adjusting the
-simulation reproduces the risetimes within $\pm$3\%.
-
-The transverse anisotropy connected to the drift of holes was observed
-as variations of the occupancy of segments located at different
-$\phi$. It was established that these variations can be used to
-determine the crystal orientation without a time consuming scan of the
-crystal.
+A fully functional pulse shape simulation package has been jointly
+developed by the GERDA and Majorana collaborations. Its application to
+true coaxial $n$-type germanium detectors was partially verified by
+comparing to the data taken with two GERDA Phase~II prototype
+detectors. The data confirm the longitudinal anisotropies inherent to
+the model of the drift of charges carriers. The longitudinal
+anisotropy connected to the drift of electrons was seen in the
+dependence of the rise-time on the azimuthal angle, $\phi$, of the
+energy deposition. After adjusting the simulation reproduces the
+risetimes within $\pm$3\%.
 
 \begin{acknowledgement}
-We would like to thank ...
+We would like to thank people in the Monte Carlo group of the Majorana
+collaboration for their kind help and cooperation in the programming.
 \end{acknowledgement}
 
-% % For tables use
-% \begin{table}
-% \caption{Please write your table caption here}
-% \label{tab:1}       % Give a unique label
-% % For LaTeX tables use
-% \begin{tabular}{lll}
-% \hline\noalign{\smallskip}
-% first & second & third  \\
-% \noalign{\smallskip}\hline\noalign{\smallskip}
-% number & number & number \\
-% number & number & number \\
-% \noalign{\smallskip}\hline
-% \end{tabular}
-% % Or use
-% \vspace*{5cm}  % with the correct table height
-% \end{table}
-%
 \begin{thebibliography}{}
 % gerda
 \bibitem{Abt04}I. Abt \textit{et al.}, arXiv:hep-ex/0404039v1.
@@ -949,6 +977,10 @@ Measurement} third ed., (Wiley, New York 1999) 423.
 \bibitem{heavy}E. M. Conwell, \textit{High field transport in
 semiconductors, Vol. 9 of Solid State Physics}, (Academic Press,
 1967).
+% Siegfried I characterization
+\bibitem{si}I. Abt \textit{et al.}, Nucl. Instr. Meth. A \textbf{577}
+(2007) 574.
+
 \end{thebibliography}
 %
 \end{document}
