@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{multirow}
 \usepackage{amssymb}
+\usepackage{amsmath}
 \usepackage{subfig}
 \usepackage{ifpdf}
 \ifpdf
@@ -20,11 +21,14 @@
 %
 \begin{document}
 %
-\title{Pulse shape simulation for true coaxial segmented n-type
-germanium detectors, I}
+\title{Validation of pulse shape simulation for true-coaxial segmented
+n-type HPGe detectors, Part I}
+%
+\subtitle{Validation of simulated pulses induced by the drift of
+electrons}
 %
 \author{I.~Abt \and A.~Caldwell \and
-K.~K\"oninger\thanks{\textit{Present address:} II. Physikalisches
+K.~Kr\"oninger\thanks{\textit{Present address:} II. Physikalisches
 Institut, G\"ottingen, Germany.} \and D.~Lenz \and
 J.~Liu\thanks{e-mail: jingliu@mppmu.mpg.de} \and X.~Liu \and
 B.~Majorovits}
@@ -37,19 +41,23 @@ B.~Majorovits}
 %\date{Received: date / Revised version: date}
 % The correct dates will be entered by Springer
 %
-\abstract{In order to achieve an extremely low background level, ture
-coaxial segmented $n$-type germanium detectors are considered to be
-used in the second phase of the GERmanium Detector Array (GERDA)
-experiment searching for the neutrinoless double beta decay of
-$^{76}$Ge. Pulse shape analysis is needed to distinguish beta decay
-signals from background events depositing energies within one segment
-of a detector. Its efficiency can only be correctly estimated by
-reliable pulse shape simulation. A fully functional pulse shape
-simulation package is jointly developed by the GERDA and Majorana
-collabrations. The simulation was compared to the data collected with
-two GERDA prototype detectors. It was proven to be reliable in
-general. Several discrepancies were founded and can be explained by
-the inhomogeneous impurity distribution in the detector.
+\abstract{GERDA (GERmanium Detector Array) is an experiment searching
+for the neutrinoless double beta decay of $^{76}$Ge. True-coaxial
+segmented $n$-type HPGe detectors are considered to be used in the
+second phase of GERDA in order to achieve an extremely low background
+level. Pulse shape analysis is needed to distinguish signal from
+background events depositing energies within one segment of a
+detector. Its efficiency can only be correctly estimated by reliable
+pulse shape simulation. A fully functional pulse shape simulation
+package was jointly developed by the GERDA and Majorana
+collaborations. The simulation was compared to the data collected with
+GERDA prototype detectors. It was proven to be reliable in
+general. Some discrepancies were found. They can be explained by the
+inhomogeneous impurity distribution in the detector. The results of
+the comparison are planned to be presented in a series of papers. This
+paper covers the detailed description of the simulation methods and
+the verification of the simulated pulses induced by the drift of
+electrons.
 % introduce the simulation methods. summarize the comparison between
 % data and simulation for electron drift. Different ways of comparison
 % were tried: averaging pulses, rise time calculations (Daniel's method,
@@ -72,45 +80,43 @@ the inhomogeneous impurity distribution in the detector.
 The GERmanium Detector Array (GERDA) experiment, designed to search
 for the neutrinoless double beta ($0\nu\beta\beta$) decay of
 $^{76}$Ge, is currently under construction in Hall A of the INFN Gran
-Sasso National Laboratory (LNGS), Italy. \cite{Abt04,Sch05} Since the
-$0\nu\beta\beta$ decay of $^{76}$Ge has a $Q$-value of 2.039~MeV,
-$\gamma$-rays with energies larger than 2.039~MeV are the main
-background source for GERDA. Fortunately, the spatial distribution of
-photon interactions with germanium differs from electron interactions
-with germanium. A photon with an energy of the order of several MeV
-has a mean free path of several centimeters in a germanium crystal. It
-most probably deposits energy in several different places and creates
-a \emph{multi-site event}. On the other hand, the average range of a
-1~MeV electron in germanium is about 0.5~mm. Since the probability for
-Bremsstrahlung is low, electrons mainly create \emph{single-site
-events} with most of the energy deposited within a radius of 1~mm. In
-order to use this difference to distinguish background events from the
-$0\nu\beta\beta$ signal, true coaxial segmented $n$-type germanium
-detectors are considered for use in the second phase (Phase~II) of
-GERDA. The size of the segments can be chosen such that electrons
-predominantly create \emph{single-segment events} while photons result
-in \emph{multi-segment events}. By requiring that only one segment has
-energy deposition most photon induced events can be
-rejected. \cite{photon}
+Sasso National Laboratory (LNGS), Italy. \cite{Abt04,Sch05} The main
+background of GERDA comes from photons with energies higher than the
+$Q$-value (2.039~MeV) of the decay. The dominant interaction of these
+photons with germanium is multiple Compton scattering. They have a
+mean free path of several centimeters in a germanium detector, hence
+most probably deposit energies in several different places. Events of
+this type are referred to as \emph{multi-site events}. On the other
+hand, the average range of 1~MeV electrons in germanium is about
+0.5~mm. Since the probability for Bremsstrahlung is low, most of the
+energy is deposited within a radius of 1~mm. Events of this type are
+referred to as \emph{single-site events}. To distinguish background
+events from the $0\nu\beta\beta$ signal, true-coaxial segmented
+$n$-type HPGe detectors are considered for use in the second phase
+(Phase~II) of GERDA. The size of the segments can be chosen such that
+electrons predominantly create \emph{single-segment events} while
+photons mostly result in \emph{multi-segment events}. Most photon
+induced events can be rejected by requiring that only one segment has
+energy deposits. \cite{photon}
 
-However, (1) there are some multi-site events which are confined to
-one segment and (2) there are some single-site events that happen on
-the boundary between two segments, namely, \textit{boundary events},
-and the energy deposited is shared between segments. If the signal is
-identified with single-segment events, events from category~(1) are
-counted erroneously as signal and events from category~(2) are
-rejected erroneously as background.
+However, (1) multi-site events can be confined to one segment and (2)
+boundary events, i.e. single-site events with energies deposited on
+the boundary between two segments, can induce signal in both
+segments. If the $0\nu\beta\beta$ signal is identified with
+single-segment events, events from category~(1) are counted
+erroneously as signal and events from category~(2) are rejected
+erroneously as background.
 
-The analysis of the electrical pulses associated with the events
-(pulse shape analysis) can help with both problems. For category~(1)
-the time development of the pulse can reveal a multi-site event while
-for events in category~(2) a close to equal strength and time
-development of the two pulses can reveal its true single-site
-structure. Concerning (1), previous studies \cite{psa} indicate that
-pulse shape analysis can provide an extra suppression factor of 1.3
-beyond the suppression achieved through segment information
-alone. These studies were limited by the lack of knowledge about the
-development of the pulses in the detector and the electronic system.
+The analysis of the electric pulses associated with the events (pulse
+shape analysis) can help with both problems. For category~(1) the time
+development of the pulse can reveal a multi-site event while for
+events in category~(2) a close to equal strength and time development
+of the two pulses can reveal its true single-site structure. Previous
+studies \cite{psa} indicate that pulse shape analysis can provide an
+extra suppression factor of 1.3 beyond the suppression achieved
+through segment information alone. These studies were limited by the
+lack of knowledge about the development of the pulses in the detector
+and the electronic system.
 
 Pulses resembling the ones expected for the $0\nu\beta\beta$ signal
 are usually collected using photon induced events with a similar event
@@ -124,43 +130,46 @@ overcome these restrictions. However, it is intrinsically difficult to
 collect large such samples. Therefore, it is essential to supplement
 the data with simulated pulses from a reliable simulation.
 
-A fully functional pulse shape simulation package is jointly developed
-by the GERDA and Majorana \cite{Gai03,Aal04} collaborations. In order
-to compare the simulation to the data collected with two GERDA
-Phase~II prototype detectors the model of the detector, as shown in
-Fig.~\ref{f:model}, is fixed accordingly in the simulation. However,
-the package can be used to simulate pulse shapes from any kind of
-germanium detectors with minor modification.
-
-The results of the comparison are planned to be presented in a series
-of papers. This paper covers the detailed description of the
-simulation methods and the verification of the simulation of pulses
-induced by electrons drift inside the germanium detector.
+A fully functional pulse shape simulation package was jointly
+developed by the GERDA and Majorana \cite{Gai03,Aal04}
+collaborations. The model of the detector in the simulation was fixed
+according to GERDA Phase~II prototype detectors, as shown in
+Fig.~\ref{f:model}, to facilitate the comparison of the simulation to
+the data collected with the prototype detectors. However, the package
+can be used to simulate pulse shapes from any kind of germanium
+detectors with minor modification.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{model}
 \caption{Detector model implemented in the simulation according to the
 GERDA Phase~II prototype detector. The detector is equally separated
-to 6 sements in $\phi$ and 3 segments in $z$.}
+to six segments in $\phi$ and three segments in $z$.}
 \label{f:model}
 \end{figure}
+
+The results of the comparison are planned to be presented in a series
+of papers. This paper covers the detailed description of the
+simulation methods and the verification of the simulation of pulses
+induced by electrons drifting inside the germanium detector. The
+verification of other aspects of the simulation, for example, the
+drift of holes, will come with separated papers.
 
 \section{Pulse shape simulation}
 \label{s:pss}
 \subsection{Procedure of the simulation}
 \label{s:proc}
-When particles ($\alpha, \beta, \gamma, n, p$, etc.) interact inside
-the germanium semiconductor detector, they create electron-hole pairs,
-which act as charge carriers. Due to the electric field inside the
-detector the charge carriers drift and induce electric signals in
+Particles ($\alpha, \beta, \gamma, n, p$, etc.) interacting inside
+semiconductor detectors create electron-hole pairs, which act as
+charge carriers. Due to the electric field inside the detector the
+charge carriers drift and induce electric signals in the
 electrodes. The electric signals are amplified, digitized and recorded
 by the electronics and data acquisition systems connected to the
-germanium detector. The procedure to simulate this signal formation
-process hence can be naturally designed as follows:
+detector. The procedure to simulate this signal formation process in
+germanium detectors hence can be naturally designed as follows:
 \begin{enumerate} 
-\item Simulate the interactions of particles with germanium to get the
-positions and the energy deposits of the interactions (hits);
+\item Simulate the interactions of particles with germanium to obtain
+the positions and the energy deposits of the interactions (hits);
 \item Group hits if they are closer to each other than the spatial
 resolution of the detector. The position of the new hit is the
 barycenter of the energies of the original hits. The energy of the new
@@ -171,14 +180,14 @@ $E_{\mbox{pair}} = 2.95$~eV;
 \item Calculate the electric field inside the detector according to
 the geometry of the detector, the high voltage applied and the spatial
 distribution of the impurity.
-\item Calculate the drift trajectories of electrons and holes from the
-interaction point to the surface of the detector taking into account
-the effect of the germanium crystal structure;
+\item Calculate the trajectories of electrons and holes drifting from
+the interaction point to the electrodes of the detector taking into
+account the effect of the germanium crystal structure;
 \item Calculate the time development of the charges, namely, the
 pulses, induced in the electrodes by the drift of the charge carriers
 based on Shockley-Ramo's Theorem \cite{Gat82,Rad88,He00}.
-\item Add to the simulated pulses the effects from the electronics
-such as noise, bandwidth limit, and shaping, etc.
+\item Add the effects from the electronics such as noise, bandwidth
+limit, and shaping, etc. to the simulated pulses.
 \end{enumerate} 
 The first step is done using a Geant4 \cite{G403,G406} based
 simulation package MaGe \cite{MaGe}, jointly developed by the GERDA
@@ -187,17 +196,17 @@ sections.
 
 \subsection{Electric field}
 \label{s:field}
-The electric field $\vec{E}$ could, in principle, be calculated by
+The electric field, $\vec{E}$, could in principle be calculated by
 solving analytically Poisson's equation $\nabla \cdot \vec{E} =
 \frac{\rho}{\epsilon}$, where $\rho$ is the space charge density
 defined by the effective number of impurities and $\epsilon$ is the
 dielectric constant. It is more practical to numerically calculate the
-potential field $\varphi$ with certain boundary conditions. For true
-coaxial $n$-type detectors the potential is several kilo volt on the
-inner surface, zero on the outer surface and float on the end
-surfaces. The electric field $\vec{E}$ is then obtained using $\vec{E}
-= - \nabla \varphi$. Since true coaxial detectors are used, it is
-convenient to use cylindrical coordinates, $r, \phi, z$:
+potential field $\varphi$ with certain boundary conditions. For
+true-coaxial $n$-type detectors the potential is several kilo volt on
+the inner surface, zero on the outer surface and float on the end
+surfaces. The electric field is then obtained using $\vec{E} = -
+\nabla \varphi$. It is convenient to use cylindrical coordinates, $r,
+\phi, z$, in case of true-coaxial detectors:
 \begin{equation} 
 \frac{1}{r} \frac{\partial \varphi}{\partial r} + 
 \frac{\partial^{2} \varphi}{\partial r^{2}} + 
@@ -231,7 +240,14 @@ commercial detector, has a very significant effect.
 cylindrical coordinate $r$ for impurity densities between 0 and $0.9
 \times 10^{-10}$/cm$^{3}$.}
 \label{f:rho} 
-\end{figure} 
+\end{figure}
+
+The dielectric constant $\epsilon_{R}$ changes slightly with
+temperature, strength of the electric field and frequency of the
+signal. A detailed investigation is going on. For this application a
+fixed value 16 was taken from page~357 of \cite{Kno99}. The effect of
+diviation from this value can be absorbed into a redefinition of the
+space charge density.
 
 \subsection{Drift of charge carriers} 
 \label{s:drift} 
@@ -239,7 +255,7 @@ cylindrical coordinate $r$ for impurity densities between 0 and $0.9
 \label{s:mobi} 
 The relation between the drift velocity of the charge carriers,
 $\vec{v}_{e}(\vec{r})$ for electrons and $\vec{v}_{h}(\vec{r})$ for
-holes, and the electric field, $\vec{E}(\vec{r})$ can be simply
+holes, and the electric field, $\vec{E}(\vec{r})$, can be simply
 expressed as:
 \begin{equation} 
 \label{e:dv}
@@ -254,10 +270,10 @@ the crystal lattice is the same as that of the charge carriers, the
 crystal structure has no influence on the drift. The drift velocity is
 proportional to the electric field so the mobility in this case is
 just a number. Since germanium detectors are normally operated at
-liquid nitrogen temperature ($\sim78$~K), the crystal lattice stays
-much calmer than the charge carriers and affects on their drift. The
-drift velocity hence is not always parallel to the electric field and
-the mobility in this case is a complex tensor.
+liquid nitrogen temperature ($\sim78$~K), the crystal lattice has
+lower temperature than the charge carriers and affects on their
+drift. The drift velocity hence is not always parallel to the electric
+field and the mobility in this case is a complex tensor.
 
 Germanium has the same crystalline structure as silicon and diamond,
 namely, a face-centered cubic (FCC) structure: each atom is at the
@@ -271,6 +287,21 @@ axes in terms of the Miller index.
 (b) definition of crystal axes.}
 \label{f:xtal} 
 \end{figure} 
+
+Germanium detectors with cylindrical shapes are produced with their
+geometrical center axis, $z$, aligned to the crystal axis $\langle 001
+\rangle$, as shown in Fig.~\ref{f:coo}. The transformation between
+$xyz$ and the coordinate system defined by the crystal axes $\langle
+100 \rangle$, $\langle 010 \rangle$ and $\langle 001 \rangle$ only
+depends on the angle between the $\langle 110 \rangle$ and the y-axis,
+$\phi_{110}$.
+\begin{figure}[htpb]\sidecaption
+\includegraphics[width=0.55\linewidth]{coordins}
+\caption{Relation between the coordinates $xyz$ and the crystal
+axes $\langle 100 \rangle$, $\langle 010 \rangle$ and $\langle 001
+\rangle$.}
+\label{f:coo} 
+\end{figure} 
  
 If the electric field lines are parallel to any of the principal
 crystallographic axes, charge carriers will always drift along the
@@ -278,28 +309,29 @@ electric field despite of the lattice temperature because of the
 symmetric structure of the germanium crystal. Measurements of the
 drift velocities along the axes $\langle 100 \rangle$ and $\langle 111
 \rangle$ with electric fields parallel to them were performed
-\cite{miha,reg} and the data can be fitted well by the following
+\cite{miha,reg,bart} and the data can be fitted well by the following
 parametrization \cite{Kno99} with electric field strengths below
 300~V/mm \cite{miha}:
 \begin{equation} 
 \label{e:para} 
 v = \frac{\mu_{0}E}{[1+(\frac{E}{\mathcal{E}_{0}})^{\beta}]^{1/\beta}}, 
 \end{equation} 
-where $v,E$ are the magnitudes of the drift velocity and electric
-field, respectively, $\mu_{0},\mathcal{E}_{0}$ and $\beta$ are
-parameters to be determined by fitting. The parameter $\mu_{0}$
+where $v$ and $E$ are the magnitudes of the drift velocity and the
+electric field, respectively, $\mu_{0},\mathcal{E}_{0}$ and $\beta$
+are parameters to be determined by fitting. The parameter $\mu_{0}$
 represents the linear relation between $v$ and $E$ at high lattice
-temperature and low electric fields, while the parameters
+temperatures and low electric fields, while the parameters
 $\mathcal{E}_{0}$ and $\beta$ model the deviation from this linear
 relation at low lattice temperature and high electric fields. The
-values of the parameters of the fit to the experimental data are
-listed in Table~\ref{t:pars}. They are important input for the
-simulation presented here, because the drift velocity in an arbitrary
-direction can be derived from the velocities along the $\langle 100
-\rangle$ and $\langle 111 \rangle$ axes using models described in
-\cite{miha} and \cite{bart}. Equation~\ref{e:para} with the input
+values of the parameters from the fit to the experimental data are
+listed in Table~\ref{t:pars}. Equation~\ref{e:para} with the input
 parameters listed in Table~\ref{t:pars} is visualized in
 Fig.~\ref{f:vvse}.
+
+The set of parameters given in \cite{bart} was used in the simulation
+presented here. Because it was verified with data taken with two AGATA
+\cite{agata} prototype detectors, and proven to be reliable,
+especially for the drift of electrons \cite{bart2}.
  
 \begin{table}[htpb]
 \centering
@@ -335,267 +367,47 @@ $\langle111\rangle$ & 38536 & 53.8 & 0.641 \\
 \end{tabular} 
 \end{table}
  
-\begin{figure*}[htpb]
+\begin{figure*}[tb]
 \centering
 \includegraphics[width=0.8\linewidth]{VvsElucian} 
 \includegraphics[width=0.8\linewidth]{VvsEbart} 
 \caption{Drift velocities of electrons (a, c) and holes (b, d) along
-the principal crystal axes as functions of electric field. Velocities
-along the axes $\langle 100 \rangle$ and $\langle 111 \rangle$ are
-calculated according to Eq.~\ref{e:para}: (a) and (b), the input
-parameters provided in \cite{miha} and \cite{reg} are used; (c) and
-(d), the input parameters provided in \cite{bart} are used. The
-velocities along the $\langle 110 \rangle$ axis are predicted
-according to Sect.~\ref{s:elec} and~\ref{s:hole}.}
+the principal crystal axes as functions of the electric
+field. Velocities along the axes $\langle 100 \rangle$ and $\langle
+111 \rangle$ are calculated according to Eq.~\ref{e:para}: (a) and
+(b), the input parameters provided in \cite{miha} and \cite{reg} are
+used; (c) and (d), the input parameters provided in \cite{bart} are
+used. The velocities along the $\langle 110 \rangle$ axis are
+predicted according to Sect.~\ref{s:elec} and~\ref{s:hole}.}
 \label{f:vvse} 
 \end{figure*} 
 
-\subsubsection{Coordinate systems} 
-\label{s:xyz}
-Two different coordinate systems are important for the
-calculation. The first one is defined by the crystal axes $\langle 100
-\rangle$, $\langle 010 \rangle$ and $\langle 001 \rangle$. The second
-one, indicated as $xyz$ in Fig.~\ref{f:model} and \ref{f:coo}, is used
-in Geant4 simulation. The cylindrical detectors are produced with
-their geometrical middle axis, $z$, aligned to the crystal axis
-$\langle 001 \rangle$. The transformation between the two coordinate
-system, hence, only depends on the angle between the $\langle 110
-\rangle$ and the y-axis, $\phi_{110}$.
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=0.55\linewidth]{coordins}
-\caption{The relation between the coordinates $xyz$ used in Geant4
-simulation and the crystal axes $\langle 100 \rangle$, $\langle 010
-\rangle$ and $\langle 001 \rangle$.}
-\label{f:coo} 
-\end{figure} 
- 
-\subsubsection{Electron drift velocity} 
-\label{s:elec} 
+\subsubsection{Drift velocities}
+\label{s:vel}
+The drift velocity in an arbitrary direction can be derived from the
+velocities along the $\langle 100 \rangle$ and $\langle 111 \rangle$
+axes given by Eq.~\ref{e:para}.
+
 The model used to calculate the electron drift velocity in any
 direction is taken from \cite{miha} and references therein. The basic
-idea is summarized as follows: the conduction band in a germanium
-crystal reaches its minimal potential in regions around the four
-equivalent $\langle 111 \rangle$ axes, the equipotential surfaces in
-these regions have ellipsoidal shapes as shown in Fig~\ref{f:valley};
-free electrons can easily populate in these regions, or valleys in the
-conduction band, and strongly accelerated by the electric field
-applied, the probability density of conduction band electrons in other
-regions is very small and can be ignored.
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=0.6\linewidth]{valleys}   
-\caption{Minimal potential regions in the conduction band along four
-equivalent $\langle 111 \rangle$ axes, where the probability density
-of electrons is dominant (taken from Ref.~\cite{bart}).}
-\label{f:valley} 
-\end{figure} 
+idea is, that the conduction band in a germanium crystal reaches its
+minimal potential in regions around the four equivalent $\langle 111
+\rangle$ axes; free electrons can easily populate in these regions and
+accelerated by the electric field; the probability density of free
+electrons in other regions is very small and can be ignored. Detailed
+calculation is described in Appendix~\ref{s:elec}. The electron drift
+velocities along the $\langle 110 \rangle$ axis are calculated as an
+example, and shown as the dotted lines in Fig.~\ref{f:vvse}a and c.
 
-Under these assumptions the dependence of the electron drift velocity
-$\vec{v}_{e}$ on the applied electric field $\vec{E}$ can be written
-as
-\begin{equation} 
-\label{e:ed} 
-\vec{v}_{e}(\vec{E}) = \mathcal{A}(E) \sum_{j} \frac{n_{j}}{n} 
-\frac{\gamma_{j}\vec{E_{0}}}
-{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}, 
-(j=1,2,3,4),
-\end{equation} 
-where the coefficient $\mathcal{A}$ is a function of $E = |\vec{E}|$;
-$\vec{E_{0}}$ is the normalized electric field vector; $n_{j}/n$ is
-the fraction of electrons in the $j$-th $\langle 111 \rangle$ valley
-and $\gamma_{j}$ is the effective mass tensor for the electrons in the
-$j$-th $\langle 111 \rangle$ valley. 
-
-Local coordinates, $x^{\prime} y^{\prime} z^{\prime}$, in the valleys
-are defined as shown in Fig.~\ref{f:axes}. The effective mass tensor,
-$\gamma_{0}$, in $x^{\prime} y^{\prime} z^{\prime}$ coordinates has a
-very simple expression:
-\begin{equation} 
-\label{e:g0} 
-\gamma_{0} \equiv \left( 
-\begin{array}{ccc} 
-m_{t}^{-1} & 0 & 0 \\ 
-0 & m_{l}^{-1} & 0 \\ 
-0 & 0 & m_{t}^{-1} 
-\end{array} \right), 
-\end{equation} 
-where $m_{t} = 1.64m_{e}$ is the transverse effective electron mass
-and $m_{l} = 0.0819m_{e}$ is the longitudinal effective electron mass,
-with $m_{e}$ denoting the free electron mass. 
- 
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=0.7\linewidth]{axes}   
-\caption{Relation between the local coordinates
-$x^{\prime}y^{\prime}z^{\prime}$ in one of the four ellipsoidal
-regions with conduction band valleys and the Geant4 coordinates
-$xyz$. The $x^{\prime}$ axis is perpendicular to the plane defined by
-$\langle111\rangle$ and $\langle001\rangle$.}
-\label{f:axes} 
-\end{figure} 
-
-Since it is convenient to simulate the interactions and the pulse
-shape development in the $xyz$ coordinates, the expression of the mass
-tensor has to be transformed from $x^{\prime} y^{\prime} z^{\prime}$
-to $xyz$ coordinates:
-\begin{equation} 
-\label{e:gs} 
-\gamma_{j} = R_{j}^{-1}\gamma_{0}R_{j} = R_{j}^{T}\gamma_{0}R_{j}, 
-\end{equation} 
-where 
-\begin{equation} 
-\label{e:rs} 
-R_{j} = R_{x^{\prime}}(\arccos(\sqrt{2/3}))R_{z}(\phi_{110}+(j-1)\pi/2) 
-\end{equation} 
-is the rotation matrix which aligns one of the four $\langle 111
-\rangle$ axes to the y-axis. $R_a(\alpha)$ indicates a
-counter-clockwise rotation\footnote{defined as looking along the
-axis.} around the axis~$a$ with rotation angle~$\alpha$.
- 
-The deviation from an equal population ($n_{e}/n$=1/4) of electrons is
-assumed to depend on the electric field like:
-\begin{equation} 
-\label{e:nion} 
-\frac{n_{j}}{n} = \frac{n_{e}}{n} + \mathcal{R}(E) 
-\left[ \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}
-{\sum_{i}\sqrt{\vec{E_{0}}^{T}\gamma_{i}\vec{E_{0}}}} - 
-\frac{n_{e}}{n} \right],  
-\end{equation} 
-where the coefficient $\mathcal{R}$ is a function of $E=|\vec{E}|$.
- 
-An electric field applied along the $\langle 100 \rangle$ direction
-affects the population of the electrons in all $\langle 111 \rangle$
-valleys equally, hence $n_{j}/n = 1/4$. Using the drift velocity
-$v_{e}^{100}(E)$ given by Eq.~\ref{e:para}, the absolute value of
-$\mathcal{A}(E)$ can be expressed as
-\begin{equation} 
-\label{e:ae} 
-|\mathcal{A}(E)| = \frac{v_{e}^{100}(E)}  
-{\displaystyle \sum_{j} \frac{1}{4} \frac{\gamma_{j}\vec{E_{0}}}
-{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}}, 
-\end{equation}
-with $\vec{E_{0}}$ parallel to $\langle 100 \rangle$.
- 
-If the electric field vector is oriented along one of the four
-$\langle 111 \rangle$ axes, there is an uniform population of the
-electrons among the other three $\langle 111 \rangle$ axes, namely,
-\begin{equation} 
-\label{e:n111} 
-\frac{n_{2}}{n} = \frac{n_{3}}{n} = \frac{n_{4}}{n}. 
-\end{equation} 
-Since 
-\begin{equation} 
-\label{e:nsum} 
-\displaystyle \sum_{j}\frac{n_{j}}{n} = 1, 
-\end{equation} 
-we have 
-\begin{equation} 
-\label{e:n12} 
-\frac{n_{1}}{n} + 3\frac{n_{2}}{n}= 1. 
-\end{equation} 
-Using the drift velocity $v_{e}^{111}(E)$ given by Eq.~\ref{e:para},
-another relation between $n_{1}/n$ and $n_{2}/n$ is obtained:
-\begin{equation} 
-\label{e:n12p} 
-v_{e}^{111}(E) =  \mathcal{A}(E) 
-\left( \frac{n_{1}}{n} \frac{\gamma_{1}\vec{E_{0}}} 
-{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}} +  
-3\frac{n_{2}}{n} \frac{\gamma_{2}\vec{E_{0}}}         
-{\sqrt{\vec{E_{0}}^{T}\gamma_{2}\vec{E_{0}}}} \right), 
-\end{equation}
-with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$. The values of
-$n_{1}/n$ and $n_{2}/n$ can be obtained by solving Eq.~\ref{e:n12} and
-\ref{e:n12p}. Then $\mathcal{R}(E)$ can be calculated as
-\begin{equation} 
-\label{e:re} 
-\mathcal{R}(E) = \frac{n_{1}/n - n_{e}/n}
-{\displaystyle \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}}
-{\sum_{j}\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}} - 
-\frac{n_{e}}{n}},
-\end{equation} 
-with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$.
-
-Since the values of $\mathcal{A}$ and $\mathcal{R}$ are independent of
-$\phi_{110}$, $\phi_{110}$ can be set to zero during the determination
-of $\mathcal{A}$ and $\mathcal{R}$ so that the calculation can be
-simplified.
-
-After the determination of the coefficients $\mathcal{A}$ and
-$\mathcal{R}$ the drift velocity can be calculated for any direction
-and any strength of the electric field. The dotted lines in
-Fig.~\ref{f:vvse}a and c present the calculated electron drift
-velocities along the $\langle 110 \rangle$ axis as an example.
- 
-\subsubsection{Hole drift velocity} 
-\label{s:hole} 
-The model used to calculate the hole drift velocity is taken from
-Ref.~\cite{bart} and the references therein. The basic assumptions in
-this model are, that only the \emph{heavy hole valence band}
-\cite{heavy} is responsible for the anisotropy of the mobility, all
-other effects are neglected, and that the mean wave vector
-$\vec{k}_{0}(k_{0}, \theta_{0}, \phi_{0})$ of heavy holes is aligned
-with the electric field $\vec{E}(E, \theta, \phi)$, namely,
-$\theta_{0} = \theta, \phi_{0} = \phi$, where $\theta, \phi$ are the
-polar and azimuthal angles with respect to the coordinate system
-defined by the $\langle 100 \rangle$, $\langle 010 \rangle$ and
-$\langle 001 \rangle$ axes as shown in Fig.~\ref{f:vsphere}.
- 
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=0.8\linewidth]{vsphere}   
-\caption{Relation between the crystal axes $\langle100\rangle$,
-$\langle010\rangle$ and $\langle001\rangle$, and the coordinates $xyz$
-used in Geant4, and the local coordinates
-$x^{\prime}y^{\prime}z^{\prime}$.}
-\label{f:vsphere} 
-\end{figure} 
- 
-Under these assumptions the three components of the hole drift
-velocity $\vec{v}$ in the local coordinates, $x^{\prime} y^{\prime}
-z^{\prime}$, at any position $(r, \theta, \phi)$ can be expressed as:
-\begin{eqnarray*} 
-\label{e:vsphere} 
-v_{x^{\prime}} &=& v^{100}_{h}(E)
-[1-\Lambda(k_{0})(\sin(\theta)^{4}\sin(2\phi)^{2} + \sin(2\theta)^{2})],\\ 
-v_{y^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})
-[2\sin(\theta)^{3}\cos(\theta)\sin(2\phi)^{2} + \sin(4\theta)],\\ 
-v_{z^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})\sin(\theta)^{3}\sin(4\phi), 
-\end{eqnarray*} 
-where $v^{111}_{h}$ and $v^{100}_{h}$ are the drift velocities along
-the $\langle 111 \rangle$ and $\langle 100 \rangle$ axes which can be
-calculated using Eq.~\ref{e:para}, and $\Lambda$ and $\Omega$,
-governing the longitudinal and transverse anisotropy of the drift, can
-be expressed as
-\begin{eqnarray*} 
-\label{e:lamb} 
-\Lambda(k_{0}) &=& -0.01322k_{0} + 0.41145k_{0}^{2} - 0.23657k_{0}^{3} + 0.04077k_{0}^{4},\\
-\Omega(k_{0}) &=& 0.006550k_{0} - 0.19946k_{0}^{2} + 0.09859k_{0}^{3} - 0.01559k_{0}^{4}. 
-\end{eqnarray*} 
-The mean wave number $k_{0}$ can be expressed as a function of
-$v_{r} = v^{111}_{h}(E)/v^{100}_{h}(E)$:
-\begin{eqnarray*} 
-\label{e:k0} 
-k_{0}(v_{r}) = 9.2652 - 26.3467v_{r} + 29.6137v_{r}^{2} - 12.3689v_{r}^{3}. 
-\end{eqnarray*} 
- 
-The same as electrons the expression of the hole drift velocity in the
-local coordinates $x^{\prime} y^{\prime} z^{\prime}$ has to be
-transformed to the $xyz$ coordinates: 
-\begin{equation} 
-\label{e:v2v}   
-\left( 
-\begin{array}{c} 
-v_{x} \\ v_{y} \\ v_{z} 
-\end{array} 
-\right) = R_{z}(\phi + \frac{\pi}{4} + \phi_{110}) R_{y^{\prime}}(\theta) \left(  
-\begin{array}{c} 
-v_{x^{\prime}} \\ v_{y^{\prime}} \\ v_{z^{\prime}} 
-\end{array} \right), 
-\end{equation}
-The hole drift velocities along the $\langle 110 \rangle$ axis are
-calculated as an example, and are shown as the dotted lines in
-Fig.~\ref{f:vvse}b and d.
+The model used to calculate the hole drift velocity in any direction
+is taken from \cite{bart} and the references therein. The basic idea
+is, that only the \emph{heavy hole valence band} \cite{heavy} is
+responsible for the anisotropy of the mobility, all other effects are
+neglected, and that the mean wave vector $\vec{k}_{0}$ of heavy holes
+is aligned with the electric field $\vec{E}$. Detailed explanation can
+be found in Appendix~\ref{s:hole}. The hole drift velocities along the
+$\langle 110 \rangle$ axis are calculated as an example, and shown as
+the dotted lines in Fig.~\ref{f:vvse}b and d.
 
 \subsubsection{Drift trajectories} 
 \label{s:trj} 
@@ -624,10 +436,9 @@ the two methods does not differ significantly. The results presented
 here are obtained with the Runge-Kutta method.
  
 Figure~\ref{f:trjs} shows the drift trajectories projected on an x-y
-cross sections of the detector. The crystal axis $\langle 110 \rangle$
-is assumed to be parallel to the y-axis, i.e. $\phi_{110}$ as shown in
-Fig.~\ref{f:coo} is set to zero. The left plot shows the inward drift
-of electrons starting at the outer surface of the detector. The
+cross section of the detector. The crystal axis $\langle 110 \rangle$
+is set to be parallel to the y-axis. The left plot shows the inward
+drift of electrons starting at the outer surface of the detector. The
 starting points are distributed equidistantly on the outer circle.
 The right plot shows the outward drift of holes starting at the inner
 surface. The starting points are distributed equidistantly on the
@@ -641,7 +452,7 @@ direction, as also shown in Fig.~\ref{f:vvse}. The trajectories along
 the crystal axes are straight because of the symmetry of the crystal
 structure. However, they are clearly bent along other directions,
 demonstrating the transverse anisotropy of the drift.
-\begin{figure*}[htbp]
+\begin{figure*}[tb]
 \centering
 \includegraphics[width=0.8\linewidth]{trjs} 
 \caption{Drift trajectories projected on the x-y cross sections of the
@@ -670,8 +481,8 @@ I(t) = Q_{0} \times [\vec{E}_{w}(\vec{r}_{h}(t)) \cdot
 where $Q_{0}$ is the electric charge carried by electrons or holes,
 $\vec{r}_{e/h}(t)$ and $\vec{v}_{e/h}(t)$ are the position and
 velocity vectors of electrons/holes as a function of time, and
-$\varphi_{w}$ and $\vec{E}_{w}$ are the so-called \emph{weighting
-potentials} and \emph{weighting fields}. 
+$\varphi_{w}$ and $\vec{E}_{w}$ are the \emph{weighting potentials}
+and \emph{weighting fields}.
 
 The weighting potentials and fields can be calculated by solving
 Poisson's equations, $\nabla^{2} \varphi = 0$ and $\nabla \cdot
@@ -689,7 +500,7 @@ pulses induced in the neighboring segments are called \emph{mirror
 pulses}. The amplitude of the mirror pulse induced in one neighboring
 segment is larger than in the other, because the trajectory of the hit
 is closer to this segment.
-\begin{figure*}[htbp] 
+\begin{figure*}[tb] 
 \centering 
 \subfloat[]{\label{f:psh} 
 \includegraphics[height=0.22\textheight]{WP}}% 
@@ -705,24 +516,25 @@ pulses induced in segments A, B and C.}
 \label{s:dbn}
 The pulses recorded by the DAQ system are quite different from the raw
 pulses. Not only their amplitudes but also their shapes are changed by
-the electronics. The baseline after a pulse exponentially decreases to
-its original level with a time constant $\tau$. The limit on the
-bandwidth of the signal transmission through the electronics cuts off
-the signal components with frequencies higher than the limit. Sharp
-edges in a pulse are hence smeared. Electronic noise may destroy any
-detailed structure of a pulse. All these effects need to be simulated.
+the electronics. The signal falls exponentially to its baseline with a
+time constant $\tau$. The limit on the bandwidth of the signal
+transmission through the electronics cuts off the signal components
+with frequencies higher than the limit. Sharp edges in a pulse are
+hence smeared. Electronic noise may destroy any detailed structure of
+a pulse. All these effects need to be simulated.
  
 Figure~\ref{f:elec} shows a modified pulse after folding in the decay
-of the baseline after the pulse, the limited bandwidth and the
-noise. The decay time was $5 \mu$s, the cut-off in bandwidth was
-10~MHz and the noise level was 5\% of the pulse amplitude. These
-values are worse than observed in the tests stands. They were chosen
-to clearly demonstrate the effects.
+of the signal, the limited bandwidth and the noise. The decay time was
+$5 \mu$s, the cut-off in bandwidth was 10~MHz and the noise level was
+5\% of the pulse amplitude. These values are worse than those were
+observed in the test stand for the first GERDA Phase~II
+detector~\cite{si}. They were chosen to clearly demonstrate the
+effects.
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\linewidth]{PSDBN} 
-\caption{Modified pulses after folding in the decay of the baseline
-after the pulse, the limited bandwidth and the noise.}
+\caption{Modified pulses after folding in the decay of the signal, the
+limited bandwidth and the noise.}
 \label{f:elec} 
 \end{figure}
 
@@ -736,10 +548,10 @@ and the detailed properties of the surface layers, are different for
 each detector. Thus the simulation has to be tuned for each individual
 detector or at least for a series of similar detectors.
 
-Several data samples were taken with the GERDA Phase II prototype
-detectors Siegfried~I \cite{si} (and SuSie?) to characterize the
-detector. The pulse shape simulation was verified using these
-data. The results are presented in this section.
+Several data samples were taken with the first GERDA Phase II
+prototype detector \cite{si} to characterize the detector. The pulse
+shape simulation was verified using these data. The results are
+presented in this section.
 
 \subsection{Measurement}
 \label{s:char}
@@ -912,7 +724,7 @@ Fig.~\ref{f:tsc} is overlaid for comparison.}
 \label{s:sum}
 A fully functional pulse shape simulation package has been jointly
 developed by the GERDA and Majorana collaborations. Its application to
-true coaxial $n$-type germanium detectors was partially verified by
+true-coaxial $n$-type germanium detectors was partially verified by
 comparing to the data taken with two GERDA Phase~II prototype
 detectors. The data confirm the longitudinal anisotropies inherent to
 the model of the drift of charges carriers. The longitudinal
@@ -925,6 +737,221 @@ risetimes within $\pm$3\%.
 We would like to thank people in the Monte Carlo group of the Majorana
 collaboration for their kind help and cooperation in the programming.
 \end{acknowledgement}
+
+\appendix
+
+\section{Electron drift velocity}
+\label{s:elec} 
+, the equipotential surfaces in these regions have
+ellipsoidal shapes as shown in Fig~\ref{f:valley}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.6\linewidth]{valleys}   
+\caption{Ellipsoidal equipotential surfaces in regions near four
+equivalent $\langle 111 \rangle$ axes, where the probability density
+of free electrons is dominant (taken from Ref.~\cite{bart}).}
+\label{f:valley} 
+\end{figure} 
+
+The dependence of the electron drift velocity on the electric field
+can be written as
+\begin{equation} 
+\label{e:ed} 
+\vec{v}_{e}(\vec{E}) = - \mathcal{A}(E) \sum_{j} \frac{n_{j}}{n} 
+\frac{\gamma_{j}\vec{E_{0}}}
+{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}, 
+(j=1,2,3,4),
+\end{equation} 
+where the coefficient $\mathcal{A}$ is a function of $E = |\vec{E}|$;
+$\vec{E_{0}}$ is the normalized electric field vector; $n_{j}/n$ is
+the fraction of free electrons drifting near the $j$-th $\langle 111
+\rangle$ axis and $\gamma_{j}$ is the effective mass tensor for these
+electrons; the negative sign indicates that electrons drift to the
+opposite direction of $\vec{E}$.
+
+The effective mass tensor in the local coordinates $x^{\prime}
+y^{\prime} z^{\prime}$ as defined in Fig.~\ref{f:axes} has a very
+simple expression:
+\begin{equation} 
+\label{e:g0} 
+\gamma_{0} \equiv \left( 
+\begin{array}{ccc} 
+m_{t}^{-1} & 0 & 0 \\ 
+0 & m_{l}^{-1} & 0 \\ 
+0 & 0 & m_{t}^{-1} 
+\end{array} \right), 
+\end{equation} 
+where $m_{t} = 1.64m_{e}$ is the transverse effective electron mass
+and $m_{l} = 0.0819m_{e}$ is the longitudinal effective electron mass,
+with $m_{e}$ denoting the free electron mass. Its expressions in any
+other coordinates, e.g. the $xyz$ coordinates used in the Geant4
+simulation, can be obtained by transforming $\gamma_{0}$ from
+$x^{\prime} y^{\prime} z^{\prime}$ to $xyz$ coordinates:
+\begin{equation} 
+\label{e:gs} 
+\gamma_{j} = R_{j}^{-1}\gamma_{0}R_{j} = R_{j}^{T}\gamma_{0}R_{j}, 
+\end{equation} 
+where 
+\begin{equation} 
+\label{e:rs} 
+R_{j} = R_{x^{\prime}}(\arccos(\sqrt{2/3}))R_{z}(\phi_{110}+(j-1)\pi/2) 
+\end{equation} 
+is the rotation matrix which aligns $x^{\prime}, y^{\prime},
+z^{\prime}$ to $x,y,z$, respectively. $R_a(\alpha)$ indicates a
+counter-clockwise rotation\footnote{defined as looking along the
+axis.} around the axis~$a$ with rotation angle~$\alpha$.
+ 
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.7\linewidth]{axes}   
+\caption{Relation between the local coordinates $x^{\prime} y^{\prime}
+z^{\prime}$ and the Geant4 coordinates $xyz$. The $x^{\prime}$ axis is
+perpendicular to the plane defined by $\langle111\rangle$ and $\langle
+001 \rangle$.}
+\label{f:axes} 
+\end{figure} 
+
+The deviation from an equal population (1/4) of free electrons is
+assumed to depend on the electric field like:
+\begin{equation} 
+\label{e:nion} 
+\frac{n_{j}}{n} = \frac{1}{4} + \mathcal{R}(E) 
+\left[ \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}
+{\sum_{i}\sqrt{\vec{E_{0}}^{T}\gamma_{i}\vec{E_{0}}}} - 
+\frac{1}{4} \right],  
+\end{equation} 
+where the coefficient $\mathcal{R}$ is a function of $E=|\vec{E}|$.
+ 
+An electric field applied along the $\langle 100 \rangle$ direction
+affects the population of the electrons in all $\langle 111 \rangle$
+valleys equally, hence $n_{j}/n = 1/4$. In this case $\mathcal{A}(E)$
+can be simply expressed as
+\begin{equation} 
+\label{e:ae} 
+\mathcal{A}(E) = - \frac{v_{e}^{100}(E)}  
+{\displaystyle \sum_{j} \frac{1}{4} \frac{\gamma_{j}}
+{\sqrt{\vec{E}_{0}^{T}\gamma_{j}\vec{E}_{0}}}}
+\end{equation}
+with $\vec{E}_{0}$ parallel to $\langle 100 \rangle$, and
+$v_{e}^{100}(E)$ being the drift velocity along $\langle 100 \rangle$,
+which is given by Eq.~\ref{e:para}.
+ 
+If the electric field vector is oriented along one of the four
+equivalent $\langle 111 \rangle$ axes, there is a uniform population
+of the electrons among the other three $\langle 111 \rangle$ axes,
+namely,
+\begin{equation} 
+\label{e:n111} 
+\frac{n_{2}}{n} = \frac{n_{3}}{n} = \frac{n_{4}}{n}. 
+\end{equation} 
+Since 
+\begin{equation} 
+\label{e:nsum} 
+\displaystyle \sum_{j}\frac{n_{j}}{n} = 1, 
+\end{equation} 
+we have 
+\begin{equation} 
+\label{e:n12} 
+\frac{n_{1}}{n} + 3\frac{n_{2}}{n}= 1. 
+\end{equation} 
+Another relation between $n_{1}/n$ and $n_{2}/n$ is obtained from
+Eq.~\ref{e:ed}:
+\begin{equation} 
+\label{e:n12p} 
+\begin{split}
+- \frac{v_{e}^{111}(E)}{\mathcal{A}(E)} = &
+\frac{n_{1}}{n} \frac{\gamma_{1}} 
+{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}} +
+\frac{n_{2}}{n} \frac{\gamma_{2}}         
+{\sqrt{\vec{E_{0}}^{T}\gamma_{2}\vec{E_{0}}}} \\ + &
+\frac{n_{2}}{n} \frac{\gamma_{3}}         
+{\sqrt{\vec{E_{0}}^{T}\gamma_{3}\vec{E_{0}}}} +  
+\frac{n_{2}}{n} \frac{\gamma_{4}}         
+{\sqrt{\vec{E_{0}}^{T}\gamma_{4}\vec{E_{0}}}}, 
+\end{split}
+\end{equation}
+with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$ and
+$v_{e}^{111}(E)$ being the drift velocity along $\langle 111 \rangle$,
+which is given by Eq.~\ref{e:para}. The values of $n_{1}/n$ and
+$n_{2}/n$ can be obtained by solving Eq.~\ref{e:n12} and
+\ref{e:n12p}. Then $\mathcal{R}(E)$ can be calculated as
+\begin{equation} 
+\label{e:re} 
+\mathcal{R}(E) = \frac{n_{1}/n - 1/4}
+{\displaystyle \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}}
+{\sum_{j}\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}} - 
+\frac{1}{4}},
+\end{equation} 
+with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$.
+
+Since the values of $\mathcal{A}$ and $\mathcal{R}$ are independent of
+$\phi_{110}$, $\phi_{110}$ can be set to zero during the determination
+of $\mathcal{A}$ and $\mathcal{R}$ so that the calculation is
+simplified.
+
+\section{Hole drift velocity} 
+\label{s:hole} 
+the mean wave vector $\vec{k}_{0}(k_{0},
+\theta_{0}, \phi_{0})$ of heavy holes is aligned with the electric
+field $\vec{E}(E, \theta, \phi)$, namely, $\theta_{0} = \theta,
+\phi_{0} = \phi$, where $\theta, \phi$ are the polar and azimuthal
+angles with respect to the coordinate system defined by the $\langle
+100 \rangle$, $\langle 010 \rangle$ and $\langle 001 \rangle$
+axes. as shown in Fig.~\ref{f:vsphere}
+  
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\linewidth]{vsphere}   
+\caption{Relation between the crystal axes $\langle100\rangle$,
+$\langle010\rangle$ and $\langle001\rangle$, and the coordinates $xyz$
+used in Geant4, and the local coordinates
+$x^{\prime}y^{\prime}z^{\prime}$.}
+\label{f:vsphere} 
+\end{figure} 
+
+Under these assumptions the three components of the hole drift
+velocity $\vec{v}$ in the local coordinates, $x^{\prime} y^{\prime}
+z^{\prime}$, at any position $(r, \theta, \phi)$ can be expressed as:
+\begin{eqnarray*} 
+\label{e:vsphere} 
+v_{x^{\prime}} &=& v^{100}_{h}(E)
+[1-\Lambda(k_{0})(\sin(\theta)^{4}\sin(2\phi)^{2} + \sin(2\theta)^{2})],\\ 
+v_{y^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})
+[2\sin(\theta)^{3}\cos(\theta)\sin(2\phi)^{2} + \sin(4\theta)],\\ 
+v_{z^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})\sin(\theta)^{3}\sin(4\phi), 
+\end{eqnarray*} 
+where $v^{111}_{h}$ and $v^{100}_{h}$ are the drift velocities along
+the $\langle 111 \rangle$ and $\langle 100 \rangle$ axes, which can be
+calculated using Eq.~\ref{e:para}, $\Lambda$ and $\Omega$, governing
+the longitudinal and transverse anisotropy of the drift, can be
+expressed as
+\begin{eqnarray*} 
+\label{e:lamb} 
+\Lambda(k_{0}) &=& -0.01322k_{0} + 0.41145k_{0}^{2} - 0.23657k_{0}^{3} + 0.04077k_{0}^{4},\\
+\Omega(k_{0}) &=& 0.006550k_{0} - 0.19946k_{0}^{2} + 0.09859k_{0}^{3} - 0.01559k_{0}^{4}. 
+\end{eqnarray*} 
+The mean wave number $k_{0}$ can be expressed as a function of
+$v_{r} = v^{111}_{h}(E)/v^{100}_{h}(E)$:
+\begin{eqnarray*} 
+\label{e:k0} 
+k_{0}(v_{r}) = 9.2652 - 26.3467v_{r} + 29.6137v_{r}^{2} - 12.3689v_{r}^{3}. 
+\end{eqnarray*} 
+ 
+The expression of the hole drift velocity in the local coordinates
+$x^{\prime} y^{\prime} z^{\prime}$ has to be transformed to the $xyz$
+coordinates:
+\begin{equation} 
+\label{e:v2v}   
+\left( 
+\begin{array}{c} 
+v_{x} \\ v_{y} \\ v_{z} 
+\end{array} 
+\right) = R_{z}(\phi + \frac{\pi}{4} + \phi_{110}) R_{y^{\prime}}(\theta) \left(  
+\begin{array}{c} 
+v_{x^{\prime}} \\ v_{y^{\prime}} \\ v_{z^{\prime}} 
+\end{array} \right), 
+\end{equation}
 
 \begin{thebibliography}{}
 % gerda
@@ -974,6 +1001,9 @@ Measurement} third ed., (Wiley, New York 1999) 423.
 % e and h drift
 \bibitem{bart}B. Bruyneel \textit{et al.}, Nucl. Instr. Meth. A
 \textbf{569} (2006) 764.
+\bibitem{agata}AGATA homepage, \url{http://www-w2k.gsi.de/agata/}.
+\bibitem{bart2}Private conversation with B. Bruyneel, one of the
+authors of Ref.~\cite{bart}.
 \bibitem{heavy}E. M. Conwell, \textit{High field transport in
 semiconductors, Vol. 9 of Solid State Physics}, (Academic Press,
 1967).
