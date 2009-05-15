@@ -8,6 +8,7 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{subfig}
+\usepackage[title]{appendix}
 \usepackage{ifpdf}
 \ifpdf
 \usepackage{epstopdf}
@@ -396,8 +397,8 @@ minimal potential in regions around the four equivalent $\langle 111
 accelerated by the electric field; the probability density of free
 electrons in other regions is very small and can be ignored. Detailed
 calculation is described in Appendix~\ref{s:elec}. The electron drift
-velocities along the $\langle 110 \rangle$ axis are calculated as an
-example, and shown as the dotted lines in Fig.~\ref{f:vvse}a and c.
+velocities along the $\langle 110 \rangle$ axis are calculated as
+examples, and shown as the dotted lines in Fig.~\ref{f:vvse}a and c.
 
 The model used to calculate the hole drift velocity in any direction
 is taken from \cite{bart} and the references therein. The basic idea
@@ -406,7 +407,7 @@ responsible for the anisotropy of the mobility, all other effects are
 neglected, and that the mean wave vector $\vec{k}_{0}$ of heavy holes
 is aligned with the electric field $\vec{E}$. Detailed explanation can
 be found in Appendix~\ref{s:hole}. The hole drift velocities along the
-$\langle 110 \rangle$ axis are calculated as an example, and shown as
+$\langle 110 \rangle$ axis are calculated as examples, and shown as
 the dotted lines in Fig.~\ref{f:vvse}b and d.
 
 \subsubsection{Drift trajectories} 
@@ -503,9 +504,9 @@ is closer to this segment.
 \begin{figure*}[tb] 
 \centering 
 \subfloat[]{\label{f:psh} 
-\includegraphics[height=0.22\textheight]{WP}}% 
+\includegraphics[height=0.235\textheight]{WP}}% 
 \subfloat[]{\label{f:pss} 
-\includegraphics[height=0.22\textheight]{CIPS}}% 
+\includegraphics[height=0.235\textheight]{CIPS}}% 
 \caption{(a) weighting potential of segment B together with an
 indication of a $\gamma$ interaction. (b) Simulated charge and current
 pulses induced in segments A, B and C.}
@@ -527,7 +528,7 @@ Figure~\ref{f:elec} shows a modified pulse after folding in the decay
 of the signal, the limited bandwidth and the noise. The decay time was
 $5 \mu$s, the cut-off in bandwidth was 10~MHz and the noise level was
 5\% of the pulse amplitude. These values are worse than those were
-observed in the test stand for the first GERDA Phase~II
+observed in the test stand for the first GERDA Phase~II prototype
 detector~\cite{si}. They were chosen to clearly demonstrate the
 effects.
 \begin{figure}[htpb]
@@ -545,47 +546,58 @@ and their measured input parameters \cite{miha,reg,bart} alone are not
 enough to provide a realistic pulse shape simulation. While some input
 parameters are generic to germanium, others, like the impurity density
 and the detailed properties of the surface layers, are different for
-each detector. Thus the simulation has to be tuned for each individual
-detector or at least for a series of similar detectors.
+each detector. Normally the information of these properties provided
+by the detector manufacturer is not accurate enough for a precise
+pulse shape simulation. The comparison of the simulation with data
+taken with an individual detector would improve the knowledge of these
+important properties of the detector. The simulation can then be tuned
+accordingly for the individual detector or for a series of similar
+detectors.
 
-Several data samples were taken with the first GERDA Phase II
-prototype detector \cite{si} to characterize the detector. The pulse
-shape simulation was verified using these data. The results are
-presented in this section.
+In most of the cases, pulses are induced by both electrons and holes
+drifting towards the electrodes. A common way to separate the effects
+of electrons from those of holes is to scan the surfaces of the
+detector with a low energy $\gamma$ source. Because low energy photons
+in average do not penetrate deeply into germanium and most likely
+deposit energy locally through the photoelectric effect, they create
+electron-hole pairs predominantly near the surface of the
+detector. One type of charge carrier reaches the near surface almost
+immediately while the other drifts through the whole bulk of the
+detector to reach the far surface. Therefore, the pulse shapes are
+mainly determined by one type of charge carrier.
+
+Pulses mainly induced by electrons can be collected by scanning the
+outer surface of an $n$-type detector. This was done with the first
+GERDA Phase~II prototype detector. \cite{si} The pulse shape
+simulation was verified using these data. The results are presented in
+this section.
 
 \subsection{Measurement}
 \label{s:char}
 The measurement was done as shown in Fig.~\ref{f:siscan}. The surfaces
 of segments 13, 14 and 15\footnote{labeled according to the channel
-number connected to the DAQ system} in the middle layer of the
-detector were scanned in azimuth angle, $\phi$\footnote{defined by the
-protractor used in the measurement} using a 75~kBq $^{152}$Eu source
-inside a copper collimator with a length of 52~mm and a pin-hole
-diameter of 11~mm. The distance between the collimator and the center
-of the detector was $\approx 85$~mm. The spot size on the detector
-surface was estimated to be $\approx 150$~mm$^{2}$. The center of the
-collimator was pointed at $z = 0$. The step size of the scan was
-5$^{\circ}$ in segment 14 and 10$^{\circ}$ in segment 13 and 15. The
-uncertainty in $\phi$ is $\approx \Delta \phi=2.5^{\circ}$. In total
-25~measurements were performed to cover 180$^{\circ}$ in azimuth. The
-pulses of the core and all segments were recorded. There were about
-$50\ 000$~events per measurement.
+number provided by the detector manufacturer} in the middle layer of
+the detector were scanned in azimuth angle, $\phi$\footnote{defined by
+the protractor used in the measurement} using a 75~kBq $^{152}$Eu
+source inside a copper collimator with a length of 52~mm and a
+pin-hole diameter of 11~mm. The distance between the collimator and
+the center of the detector was $\approx 85$~mm. The spot size on the
+detector surface was estimated to be $\approx 150$~mm$^{2}$. The
+center of the collimator was pointed at $z = 0$. The step size of the
+scan was 5$^{\circ}$ in segment 14 and 10$^{\circ}$ in segment 13 and
+15. The uncertainty in $\phi$ is $\approx \Delta \phi=2.5^{\circ}$. In
+total 25~measurements were performed to cover 180$^{\circ}$ in
+azimuth. The pulses of the core and all segments were recorded.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\linewidth]{siscan}
-\caption{Surface scan measurement using Siegfried~I.}
+\caption{Scan on the surface of a GERDA Phase II prototype detector.}
 \label{f:siscan}
 \end{figure}
 
 The 122~keV $\gamma$ line of the $^{152}$Eu source used in the scan
-provided the events to study the drift of electrons. Because these low
-energy photons in average do not penetrate deeply into germanium and
-most likely deposit energy locally through the photoelectric effect,
-they create electron-hole pairs predominantly near the outer surface
-of the detector. The holes reach the outer surface almost immediately
-while the electrons have to drift through nearly the whole bulk of the
-detector until they reach the inner surface. Therefore, the pulse
-shapes are mainly determined by the drift of the electrons.
+provided the events to study the drift of electrons. 
 
 \subsection{Rise time comparison}
 \label{s:lon}
@@ -738,12 +750,23 @@ We would like to thank people in the Monte Carlo group of the Majorana
 collaboration for their kind help and cooperation in the programming.
 \end{acknowledgement}
 
-\appendix
+\begin{appendices}
 
 \section{Electron drift velocity}
 \label{s:elec} 
-, the equipotential surfaces in these regions have
-ellipsoidal shapes as shown in Fig~\ref{f:valley}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{A.\arabic{equation}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{A.\arabic{figure}}
+\setcounter{footnote}{0}
+
+In this appendix it is explained in detail how to calculate the
+electron drift velocity in an arbitrary direction using the model
+provided in \cite{miha} and references therein.
+
+There are four equivalent $\langle 111 \rangle$ axes in a germanium
+crystal. The equipotential surfaces of the conduction band in these
+regions have ellipsoidal shapes as shown in Fig~\ref{f:valley}.
 
 \begin{figure}[htpb]
 \centering
@@ -761,7 +784,7 @@ can be written as
 \vec{v}_{e}(\vec{E}) = - \mathcal{A}(E) \sum_{j} \frac{n_{j}}{n} 
 \frac{\gamma_{j}\vec{E_{0}}}
 {\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}, 
-(j=1,2,3,4),
+j=1,2,3,4,
 \end{equation} 
 where the coefficient $\mathcal{A}$ is a function of $E = |\vec{E}|$;
 $\vec{E_{0}}$ is the normalized electric field vector; $n_{j}/n$ is
@@ -785,9 +808,9 @@ m_{t}^{-1} & 0 & 0 \\
 where $m_{t} = 1.64m_{e}$ is the transverse effective electron mass
 and $m_{l} = 0.0819m_{e}$ is the longitudinal effective electron mass,
 with $m_{e}$ denoting the free electron mass. Its expressions in any
-other coordinates, e.g. the $xyz$ coordinates used in the Geant4
-simulation, can be obtained by transforming $\gamma_{0}$ from
-$x^{\prime} y^{\prime} z^{\prime}$ to $xyz$ coordinates:
+other coordinates, e.g. the $xyz$ coordinates, can be obtained by
+transforming $\gamma_{0}$ from $x^{\prime} y^{\prime} z^{\prime}$ to
+$xyz$ coordinates:
 \begin{equation} 
 \label{e:gs} 
 \gamma_{j} = R_{j}^{-1}\gamma_{0}R_{j} = R_{j}^{T}\gamma_{0}R_{j}, 
@@ -874,7 +897,7 @@ Eq.~\ref{e:ed}:
 with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$ and
 $v_{e}^{111}(E)$ being the drift velocity along $\langle 111 \rangle$,
 which is given by Eq.~\ref{e:para}. The values of $n_{1}/n$ and
-$n_{2}/n$ can be obtained by solving Eq.~\ref{e:n12} and
+$n_{2}/n$ can be obtained by solving Eqs.~\ref{e:n12} and
 \ref{e:n12p}. Then $\mathcal{R}(E)$ can be calculated as
 \begin{equation} 
 \label{e:re} 
@@ -885,34 +908,43 @@ $n_{2}/n$ can be obtained by solving Eq.~\ref{e:n12} and
 \end{equation} 
 with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$.
 
-Since the values of $\mathcal{A}$ and $\mathcal{R}$ are independent of
-$\phi_{110}$, $\phi_{110}$ can be set to zero during the determination
-of $\mathcal{A}$ and $\mathcal{R}$ so that the calculation is
-simplified.
+Once $\mathcal{A}$ and $\mathcal{R}$ are known, $\vec{v}_{e}$ can be
+obtained by solving Eqs.~\ref{e:ed} and \ref{e:nion}. Since the values
+of $\mathcal{A}$ and $\mathcal{R}$ are independent of $\phi_{110}$,
+$\phi_{110}$ can be set to zero during the determination of
+$\mathcal{A}$ and $\mathcal{R}$ so that the calculation is simplified.
 
 \section{Hole drift velocity} 
 \label{s:hole} 
-the mean wave vector $\vec{k}_{0}(k_{0},
-\theta_{0}, \phi_{0})$ of heavy holes is aligned with the electric
-field $\vec{E}(E, \theta, \phi)$, namely, $\theta_{0} = \theta,
-\phi_{0} = \phi$, where $\theta, \phi$ are the polar and azimuthal
-angles with respect to the coordinate system defined by the $\langle
-100 \rangle$, $\langle 010 \rangle$ and $\langle 001 \rangle$
-axes. as shown in Fig.~\ref{f:vsphere}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{B.\arabic{equation}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{B.\arabic{figure}}
+
+In this appendix it is explained in detail how to calculate the hole
+drift velocity in an arbitrary direction using the model provided in
+\cite{bart} and references therein.
+
+It is assumed in this model that the mean wave vector
+$\vec{k}_{0}(k_{0}, \theta_{0}, \phi_{0})$ of heavy holes is aligned
+with the electric field $\vec{E}(E, \theta, \phi)$, namely,
+$\theta_{0} = \theta, \phi_{0} = \phi$, where $\theta, \phi$ are the
+polar and azimuthal angles with respect to the coordinate system
+defined by the $\langle 100 \rangle$, $\langle 010 \rangle$ and
+$\langle 001 \rangle$ axes. as shown in Fig.~\ref{f:vsphere}
   
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=0.8\linewidth]{vsphere}   
-\caption{Relation between the crystal axes $\langle100\rangle$,
-$\langle010\rangle$ and $\langle001\rangle$, and the coordinates $xyz$
-used in Geant4, and the local coordinates
-$x^{\prime}y^{\prime}z^{\prime}$.}
+\caption{Relation between the crystal axes $\langle 100 \rangle$,
+$\langle 010 \rangle$ and $\langle 001 \rangle$, the coordinates
+$xyz$, and the local coordinates $x^{\prime} y^{\prime} z^{\prime}$.}
 \label{f:vsphere} 
 \end{figure} 
 
-Under these assumptions the three components of the hole drift
-velocity $\vec{v}$ in the local coordinates, $x^{\prime} y^{\prime}
-z^{\prime}$, at any position $(r, \theta, \phi)$ can be expressed as:
+The three components of the hole drift velocity $\vec{v}$ in the local
+coordinates, $x^{\prime} y^{\prime} z^{\prime}$, at any position $(r,
+\theta, \phi)$ can be expressed as:
 \begin{eqnarray*} 
 \label{e:vsphere} 
 v_{x^{\prime}} &=& v^{100}_{h}(E)
@@ -938,10 +970,10 @@ $v_{r} = v^{111}_{h}(E)/v^{100}_{h}(E)$:
 k_{0}(v_{r}) = 9.2652 - 26.3467v_{r} + 29.6137v_{r}^{2} - 12.3689v_{r}^{3}. 
 \end{eqnarray*} 
  
-The expression of the hole drift velocity in the local coordinates
-$x^{\prime} y^{\prime} z^{\prime}$ has to be transformed to the $xyz$
-coordinates:
-\begin{equation} 
+The hole drift velocity in the $xyz$ coordinates is abtained by
+transforming its expression in the local coordinates $x^{\prime}
+y^{\prime} z^{\prime}$ to $xyz$:
+\begin{equation*} 
 \label{e:v2v}   
 \left( 
 \begin{array}{c} 
@@ -950,8 +982,10 @@ v_{x} \\ v_{y} \\ v_{z}
 \right) = R_{z}(\phi + \frac{\pi}{4} + \phi_{110}) R_{y^{\prime}}(\theta) \left(  
 \begin{array}{c} 
 v_{x^{\prime}} \\ v_{y^{\prime}} \\ v_{z^{\prime}} 
-\end{array} \right), 
-\end{equation}
+\end{array} \right).
+\end{equation*}
+
+\end{appendices}
 
 \begin{thebibliography}{}
 % gerda
