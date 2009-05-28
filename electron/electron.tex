@@ -1,4 +1,4 @@
-\documentclass[epj]{svjour}
+\documentclass[epj,referee]{svjour}
 % options:
 % draft: draw boundaries of pictures
 % referee: doulbe line height
@@ -8,7 +8,6 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{subfig}
-\usepackage[title]{appendix}
 \usepackage{ifpdf}
 \ifpdf
 \usepackage{epstopdf}
@@ -19,6 +18,8 @@
 \usepackage[usenames,dvips]{color}
 \usepackage[ps2pdf]{hyperref}
 \fi
+%
+\renewcommand{\thefootnote}{\Roman{footnote}}
 %
 \begin{document}
 %
@@ -247,7 +248,7 @@ The dielectric constant $\epsilon_{R}$ changes slightly with
 temperature, strength of the electric field and frequency of the
 signal. A detailed investigation is going on. For this application a
 fixed value 16 was taken from page~357 of \cite{Kno99}. The effect of
-diviation from this value can be absorbed into a redefinition of the
+deviation from this value can be absorbed into a redefinition of the
 space charge density.
 
 \subsection{Drift of charge carriers} 
@@ -383,8 +384,8 @@ predicted according to Sect.~\ref{s:elec} and~\ref{s:hole}.}
 \label{f:vvse} 
 \end{figure*} 
 
-\subsubsection{Drift velocities}
-\label{s:vel}
+\subsubsection{Electron drift velocity}
+\label{s:elec}
 The drift velocity in an arbitrary direction can be derived from the
 velocities along the $\langle 100 \rangle$ and $\langle 111 \rangle$
 axes given by Eq.~\ref{e:para}.
@@ -393,22 +394,232 @@ The model used to calculate the electron drift velocity in any
 direction is taken from \cite{miha} and references therein. The basic
 idea is, that the conduction band in a germanium crystal reaches its
 minimal potential in regions around the four equivalent $\langle 111
-\rangle$ axes; free electrons can easily populate in these regions and
-accelerated by the electric field; the probability density of free
-electrons in other regions is very small and can be ignored. Detailed
-calculation is described in Appendix~\ref{s:elec}. The electron drift
-velocities along the $\langle 110 \rangle$ axis are calculated as
-examples, and shown as the dotted lines in Fig.~\ref{f:vvse}a and c.
+\rangle$ axes; the equipotential surfaces of the conduction band in
+these regions have ellipsoidal shapes as shown in Fig~\ref{f:valley};
+free electrons can easily populate in these regions and accelerated by
+the electric field; the probability density of free electrons in other
+regions is very small and can be ignored.
 
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.6\linewidth]{valleys}   
+\caption{Ellipsoidal equipotential surfaces in regions near four
+equivalent $\langle 111 \rangle$ axes, where the probability density
+of free electrons is dominant (taken from Ref.~\cite{bart}).}
+\label{f:valley} 
+\end{figure} 
+
+Under these assumptions the dependence of the electron drift velocity
+on the electric field can be written as
+\begin{equation} 
+\label{e:ed} 
+\vec{v}_{e}(\vec{E}) = - \mathcal{A}(E) \sum_{j} \frac{n_{j}}{n} 
+\frac{\gamma_{j}\vec{E_{0}}}
+{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}, 
+j=1,2,3,4,
+\end{equation} 
+where the coefficient $\mathcal{A}$ is a function of $E = |\vec{E}|$;
+$\vec{E_{0}}$ is the normalized electric field vector; $n_{j}/n$ is
+the fraction of free electrons drifting near the $j$-th $\langle 111
+\rangle$ axis and $\gamma_{j}$ is the effective mass tensor for these
+electrons; the negative sign indicates that electrons drift to the
+opposite direction of $\vec{E}$.
+
+The effective mass tensor in the local coordinates $x^{\prime}
+y^{\prime} z^{\prime}$ as defined in Fig.~\ref{f:axes} has a very
+simple expression:
+\begin{equation} 
+\label{e:g0} 
+\gamma_{0} \equiv \left( 
+\begin{array}{ccc} 
+m_{t}^{-1} & 0 & 0 \\ 
+0 & m_{l}^{-1} & 0 \\ 
+0 & 0 & m_{t}^{-1} 
+\end{array} \right), 
+\end{equation} 
+where $m_{t} = 1.64m_{e}$ is the transverse effective electron mass
+and $m_{l} = 0.0819m_{e}$ is the longitudinal effective electron mass,
+with $m_{e}$ denoting the free electron mass. Its expressions in any
+other coordinates, e.g. the $xyz$ coordinates, can be obtained by
+transforming $\gamma_{0}$ from $x^{\prime} y^{\prime} z^{\prime}$ to
+$xyz$ coordinates:
+\begin{equation} 
+\label{e:gs} 
+\gamma_{j} = R_{j}^{-1}\gamma_{0}R_{j} = R_{j}^{T}\gamma_{0}R_{j}, 
+\end{equation} 
+where 
+\begin{equation} 
+\label{e:rs} 
+R_{j} = R_{x^{\prime}}(\arccos(\sqrt{2/3}))R_{z}(\phi_{110}+(j-1)\pi/2) 
+\end{equation} 
+is the rotation matrix which aligns $x^{\prime}, y^{\prime},
+z^{\prime}$ to $x,y,z$, respectively. $R_a(\alpha)$ indicates a
+counter-clockwise rotation\footnote{defined as looking along the
+axis.} around the axis~$a$ with rotation angle~$\alpha$.
+ 
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.7\linewidth]{axes}   
+\caption{Relation between the local coordinates $x^{\prime} y^{\prime}
+z^{\prime}$ and the Geant4 coordinates $xyz$. The $x^{\prime}$ axis is
+perpendicular to the plane defined by $\langle111\rangle$ and $\langle
+001 \rangle$.}
+\label{f:axes} 
+\end{figure} 
+
+The deviation from an equal population (1/4) of free electrons is
+assumed to depend on the electric field like:
+\begin{equation} 
+\label{e:nion} 
+\frac{n_{j}}{n} = \frac{1}{4} + \mathcal{R}(E) 
+\left[ \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}
+{\sum_{i}\sqrt{\vec{E_{0}}^{T}\gamma_{i}\vec{E_{0}}}} - 
+\frac{1}{4} \right],  
+\end{equation} 
+where the coefficient $\mathcal{R}$ is a function of $E=|\vec{E}|$.
+ 
+An electric field applied along the $\langle 100 \rangle$ direction
+affects the population of the electrons in all $\langle 111 \rangle$
+valleys equally, hence $n_{j}/n = 1/4$. In this case $\mathcal{A}(E)$
+can be simply expressed as
+\begin{equation} 
+\label{e:ae} 
+\mathcal{A}(E) = - \frac{v_{e}^{100}(E)}  
+{\displaystyle \sum_{j} \frac{1}{4} \frac{\gamma_{j}}
+{\sqrt{\vec{E}_{0}^{T}\gamma_{j}\vec{E}_{0}}}}
+\end{equation}
+with $\vec{E}_{0}$ parallel to $\langle 100 \rangle$, and
+$v_{e}^{100}(E)$ being the drift velocity along $\langle 100 \rangle$,
+which is given by Eq.~\ref{e:para}.
+ 
+If the electric field vector is oriented along one of the four
+equivalent $\langle 111 \rangle$ axes, there is a uniform population
+of the electrons among the other three $\langle 111 \rangle$ axes,
+namely,
+\begin{equation} 
+\label{e:n111} 
+\frac{n_{2}}{n} = \frac{n_{3}}{n} = \frac{n_{4}}{n}. 
+\end{equation} 
+Since 
+\begin{equation} 
+\label{e:nsum} 
+\displaystyle \sum_{j}\frac{n_{j}}{n} = 1, 
+\end{equation} 
+we have 
+\begin{equation} 
+\label{e:n12} 
+\frac{n_{1}}{n} + 3\frac{n_{2}}{n}= 1. 
+\end{equation} 
+Another relation between $n_{1}/n$ and $n_{2}/n$ is obtained from
+Eq.~\ref{e:ed}:
+\begin{equation} 
+\label{e:n12p} 
+\begin{split}
+- \frac{v_{e}^{111}(E)}{\mathcal{A}(E)} = &
+\frac{n_{1}}{n} \frac{\gamma_{1}} 
+{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}} +
+\frac{n_{2}}{n} \frac{\gamma_{2}}         
+{\sqrt{\vec{E_{0}}^{T}\gamma_{2}\vec{E_{0}}}} \\ + &
+\frac{n_{2}}{n} \frac{\gamma_{3}}         
+{\sqrt{\vec{E_{0}}^{T}\gamma_{3}\vec{E_{0}}}} +  
+\frac{n_{2}}{n} \frac{\gamma_{4}}         
+{\sqrt{\vec{E_{0}}^{T}\gamma_{4}\vec{E_{0}}}}, 
+\end{split}
+\end{equation}
+with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$ and
+$v_{e}^{111}(E)$ being the drift velocity along $\langle 111 \rangle$,
+which is given by Eq.~\ref{e:para}. The values of $n_{1}/n$ and
+$n_{2}/n$ can be obtained by solving Eqs.~\ref{e:n12} and
+\ref{e:n12p}. Then $\mathcal{R}(E)$ can be calculated as
+\begin{equation} 
+\label{e:re} 
+\mathcal{R}(E) = \frac{n_{1}/n - 1/4}
+{\displaystyle \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}}
+{\sum_{j}\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}} - 
+\frac{1}{4}},
+\end{equation} 
+with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$.
+
+Once $\mathcal{A}$ and $\mathcal{R}$ are known, $\vec{v}_{e}$ can be
+obtained by solving Eqs.~\ref{e:ed} and \ref{e:nion}. Since the values
+of $\mathcal{A}$ and $\mathcal{R}$ are independent of $\phi_{110}$,
+$\phi_{110}$ can be set to zero during the determination of
+$\mathcal{A}$ and $\mathcal{R}$ so that the calculation is simplified.
+
+The electron drift velocities along the $\langle 110 \rangle$ axis are
+calculated as examples, and shown as the dotted lines in
+Fig.~\ref{f:vvse}a and c.
+
+
+\section{Hole drift velocity} 
+\label{s:hole} 
 The model used to calculate the hole drift velocity in any direction
 is taken from \cite{bart} and the references therein. The basic idea
 is, that only the \emph{heavy hole valence band} \cite{heavy} is
 responsible for the anisotropy of the mobility, all other effects are
-neglected, and that the mean wave vector $\vec{k}_{0}$ of heavy holes
-is aligned with the electric field $\vec{E}$. Detailed explanation can
-be found in Appendix~\ref{s:hole}. The hole drift velocities along the
-$\langle 110 \rangle$ axis are calculated as examples, and shown as
-the dotted lines in Fig.~\ref{f:vvse}b and d.
+neglected, and that the mean wave vector $\vec{k}_{0}(k_{0},
+\theta_{0}, \phi_{0})$ of heavy holes is aligned with the electric
+field $\vec{E}(E, \theta, \phi)$, namely, $\theta_{0} = \theta,
+\phi_{0} = \phi$, where $\theta, \phi$ are the polar and azimuthal
+angles with respect to the coordinate system defined by the $\langle
+100 \rangle$, $\langle 010 \rangle$ and $\langle 001 \rangle$ axes as
+shown in Fig.~\ref{f:vsphere}.
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\linewidth]{vsphere}   
+\caption{Relation between the crystal axes $\langle 100 \rangle$,
+$\langle 010 \rangle$ and $\langle 001 \rangle$, the coordinates
+$xyz$, and the local coordinates $x^{\prime} y^{\prime} z^{\prime}$.}
+\label{f:vsphere} 
+\end{figure} 
+
+The three components of the hole drift velocity $\vec{v}$ in the local
+coordinates, $x^{\prime} y^{\prime} z^{\prime}$, at any position $(r,
+\theta, \phi)$ can be expressed as:
+\begin{eqnarray*} 
+\label{e:vsphere} 
+v_{x^{\prime}} &=& v^{100}_{h}(E)
+[1-\Lambda(k_{0})(\sin(\theta)^{4}\sin(2\phi)^{2} + \sin(2\theta)^{2})],\\ 
+v_{y^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})
+[2\sin(\theta)^{3}\cos(\theta)\sin(2\phi)^{2} + \sin(4\theta)],\\ 
+v_{z^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})\sin(\theta)^{3}\sin(4\phi), 
+\end{eqnarray*} 
+where $v^{111}_{h}$ and $v^{100}_{h}$ are the drift velocities along
+the $\langle 111 \rangle$ and $\langle 100 \rangle$ axes, which can be
+calculated using Eq.~\ref{e:para}, $\Lambda$ and $\Omega$, governing
+the longitudinal and transverse anisotropy of the drift, can be
+expressed as
+\begin{eqnarray*} 
+\label{e:lamb} 
+\Lambda(k_{0}) &=& -0.01322k_{0} + 0.41145k_{0}^{2} - 0.23657k_{0}^{3} + 0.04077k_{0}^{4},\\
+\Omega(k_{0}) &=& 0.006550k_{0} - 0.19946k_{0}^{2} + 0.09859k_{0}^{3} - 0.01559k_{0}^{4}. 
+\end{eqnarray*} 
+The mean wave number $k_{0}$ can be expressed as a function of
+$v_{r} = v^{111}_{h}(E)/v^{100}_{h}(E)$:
+\begin{eqnarray*} 
+\label{e:k0} 
+k_{0}(v_{r}) = 9.2652 - 26.3467v_{r} + 29.6137v_{r}^{2} - 12.3689v_{r}^{3}. 
+\end{eqnarray*} 
+ 
+The hole drift velocity in the $xyz$ coordinates is obtained by
+transforming its expression in the local coordinates $x^{\prime}
+y^{\prime} z^{\prime}$ to $xyz$:
+\begin{equation*} 
+\label{e:v2v}   
+\left( 
+\begin{array}{c} 
+v_{x} \\ v_{y} \\ v_{z} 
+\end{array} 
+\right) = R_{z}(\phi + \frac{\pi}{4} + \phi_{110}) R_{y^{\prime}}(\theta) \left(  
+\begin{array}{c} 
+v_{x^{\prime}} \\ v_{y^{\prime}} \\ v_{z^{\prime}} 
+\end{array} \right).
+\end{equation*}
+
+The hole drift velocities along the $\langle 110 \rangle$ axis are
+calculated as examples, and shown as the dotted lines in
+Fig.~\ref{f:vvse}b and d.
 
 \subsubsection{Drift trajectories} 
 \label{s:trj} 
@@ -578,84 +789,81 @@ The measurement was done as shown in Fig.~\ref{f:siscan}. The surfaces
 of segments 13, 14 and 15\footnote{labeled according to the channel
 number provided by the detector manufacturer} in the middle layer of
 the detector were scanned in azimuth angle, $\phi$\footnote{defined by
-the protractor used in the measurement} using a 75~kBq $^{152}$Eu
+the protractor used in the measurement}, using a 75~kBq $^{152}$Eu
 source inside a copper collimator with a length of 52~mm and a
 pin-hole diameter of 11~mm. The distance between the collimator and
-the center of the detector was $\approx 85$~mm. The spot size on the
-detector surface was estimated to be $\approx 150$~mm$^{2}$. The
-center of the collimator was pointed at $z = 0$. The step size of the
-scan was 5$^{\circ}$ in segment 14 and 10$^{\circ}$ in segment 13 and
-15. The uncertainty in $\phi$ is $\approx \Delta \phi=2.5^{\circ}$. In
+the center of the detector was about 85~mm. The diameter of the spot
+on the detector surface was estimated to be about 20~mm. The center of
+the collimator was pointed at $z = 0$. The step size of the scan was
+5$^{\circ}$ in segment 14 and 10$^{\circ}$ in segment 13 and 15. The
+uncertainty in $\phi$ is approximately $\Delta \phi = 2.5^{\circ}$. In
 total 25~measurements were performed to cover 180$^{\circ}$ in
-azimuth. The pulses of the core and all segments were recorded.
+azimuth. The pulses of the core and all segments were recorded. The
+122~keV $\gamma$ line from the $^{152}$Eu source provided the events
+to study the drift of electrons.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\linewidth]{siscan}
-\caption{Scan on the surface of a GERDA Phase II prototype detector.}
+\caption{Scan on the surface of the first GERDA Phase II prototype
+detector.}
 \label{f:siscan}
 \end{figure}
 
-The 122~keV $\gamma$ line of the $^{152}$Eu source used in the scan
-provided the events to study the drift of electrons. 
 
-\subsection{Rise time comparison}
+\subsection{Risetime comparison}
 \label{s:lon}
-To analyze the pulse shapes quantitatively the 10\%-30\% and 10\%-90\%
-risetimes of the core pulses were calculated. Figure~\ref{f:rt10}
-shows the average risetimes as a function of the azimuth angle
-$\phi$. The segment boundaries are also indicated.  Clear oscillation
-patterns can be seen in both cases. This confirms the longitudinal
-anisotropy of the drift velocity of electrons depending on the
-angle~$\phi$. The electrons need different times to drift nearly the
-same distance.\footnote{Strictly speaking, because of the bend of the
-drift trajectories the distances covered by electrons in different
-$\phi$ angles are sightly different from each other.  However, this is
-a second-order effect. The difference of the risetimes is mainly
-caused by the different drift velocity along $r$ at different angles
-$\phi$.} Fits with a sine function give periods of about 90$^{\circ}$
-for the longitudinal anisotropy. This supports the model applied.
-
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=0.7\linewidth]{phi_risetime1030}
-\includegraphics[width=0.7\linewidth]{phi_risetime1090}
-\caption{Average 10\%-30\% (left) and 10\%-90\% (right) risetimes of
-the core pulses as a function of the azimuth angle $\phi$ (taken from
-\cite{si}). The dashed lines indicate the segment boundaries.}
-\label{f:rt10}
-\end{figure}
+The pulses collected were analyzed quantitatively in \cite{si}. It is
+shown in Fig.~13 in \cite{si} that the longitudinal anisotropy of the
+drift velocity of electrons depends on the azimuth angle $\phi$. The
+electrons need different times to drift nearly the same
+distance.\footnote{Strictly speaking, because of the bend of the drift
+trajectories the distances covered by electrons in different $\phi$
+angles are sightly different from each other.  However, this is a
+second-order effect. The difference of the risetimes is mainly caused
+by the different drift velocity along $r$ at different angles $\phi$.}
+Fits with a sinusoid function give periods of about 90$^{\circ}$ for
+the longitudinal anisotropy. This supports the model applied.
 
 Pulses induced in the core electrode by the drift of electrons
-starting at the outer surface of Siegfried I were simulated. The
-geometry and the experimental setup implemented in the simulation are
-shown in Fig.~\ref{f:model} and \ref{f:siscan}. The operational
-voltage of Siegfried~I is 3~kV. The impurity density was implemented
-in the simulation according to the values given by the detector
-manufacturer.
+starting at the outer surface of the detector were simulated. The
+geometry of the detector is shown in Fig.~\ref{f:model}. The
+operational voltage of is 3~kV. The effective impurity density was
+implemented in the simulation according to the values given by the
+detector manufacturer (see \cite{si}). According to the model,
+electrons drift slowest along the $\langle 110 \rangle$ axes and
+risetimes reach their maxima. Thus, Fig.~13 in \cite{si} indicates
+that one of the $\langle 110 \rangle$ axes is nearly aligned with the
+right boundary of segment 15 at $\approx$\,290$^\circ$. This was
+implemented in the simulation. A decay time of 50~$\mu$s and a cut-off
+bandwidth of 37.5~MHz were implemented according to the specification
+of the electronics system. Electronic noise was not added to the pulse
+simulation to simplify direct comparisons with individual pulses. 
 
-According to the model, electrons drift slowest along the $\langle 110
-\rangle$ axes and risetimes reach their maxima. Thus,
-Figure~\ref{f:rt10} indicates that one of the $\langle 110 \rangle$
-axes is nearly aligned with the right boundary of segment 15 at
-$\approx$\,290$^\circ$. This was implemented in the simulation. A
-decay time of 50~$\mu$s and a cut-off bandwidth of 37.5~MHz were
-implemented according to the specification of the electronics
-system. Electronic noise was not added to the pulse simulation to
-simplify direct comparisons with individual pulses. Several
-parameters, the \emph{Amplitude}, the \emph{Time offset} and the
-\emph{Time scaling factor} of the pulse, were introduced to fit the
-shape of a simulated to a measured pulse. The time offset shifts the
-pulse while the time scaling factor stretches or squeezes the pulse in
-time.
+The amplitude, $A$, time offset, $T_{o}$, and time scaling factor,
+$T_{s}$, of the pulse, were introduced as free parameters to fit the
+shape of a simulated to a measured pulse. The relation between a
+sample in the measured pulse at time $t$, $C_{d}(t)$, and a sample in
+the simulated pulse, $C_{s}(t)$, for a good fit reads,
+\begin{equation}
+\label{e:tsc}
+C_{d}(t) \approx A \times C_{s}(T_{s} \cdot t + T_{o}).
+\end{equation}
+The amplitude normalizes the height of the simulated to the measured
+pulse; the time offset shifts the simulated pulse in time; and the
+time scaling factor is the ratio of the simulated risetime to the
+measured one. If $T_{s} = 1$, the simulated risetime is exactly the
+same as the measured one; if $T_{s} < 1$, the simulated risetime is
+shorter than the measured one; if $T_{s} > 1$, the simulated risetime
+is longer than the measured one.
 
 Figure~\ref{f:s2d} shows a randomly selected core pulse and the result
 of a fit with the simulated pulse along the $\langle 110 \rangle$
 axis. The fit yields a time scaling factor of 0.81, indicating that
-the simulated pulse overestimates the pulse-length by $\approx
-20\%$. Nevertheless the $\chi^{2}$/NDF is excellent. In general a
-factor between 1 and 0.94 is expected as the simulation reflects the
-maximal risetime.
+the simulated pulse underestimates the pulse-length by $\approx
+20\%$. In general a factor between 1 and 1.06 is expected as the
+simulation reflects the maximal risetime. Nevertheless the
+$\chi^{2}$/NDF is excellent.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{PSs2d}
@@ -666,12 +874,21 @@ the data and their error bars indicate the noise level.}
 
 A subset of pulses with fits were selected requiring
 \begin{itemize}
-\item $\chi^{2} < 200$ to eliminate very noisy events,
+\item $\chi^{2} < 220$ to eliminate background events. The $\chi^{2}$
+distribution is shown in Fig.~\ref{f:x2}.
 \item The pulse amplitude in simulation must be equal to that in data
-within the resolution to eliminate events mis-recorded by the DAQ,
+within the resolution to eliminate events mis-recorded by the DAQ.
 \item Time offset $> -300$~ns as very early pulses were not treated
 correctly by the DAQ.
 \end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\linewidth]{chi280}
+\caption{$\chi^{2}$ distribution from the fits of the simulated to
+measured pulses taken at $\phi=280^{\circ}$.}
+\label{f:x2}
+\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -685,12 +902,10 @@ The distributions of the time scaling factors for each scan position
 were fitted with a Gaussian function. Fig.~\ref{f:ts280} shows the
 distribution for $\phi = 280^{\circ}$. The scaling factor at
 $280^{\circ}$ should be close to one, if the model would represent the
-detector perfectly. It is about 7\% lower. However, since the events
-in data do not start exactly at the outer surface, slightly shorter
-risetimes are expected in data compared to the simulation.
+detector perfectly. It is about 7\% lower.
 
 The mean scaling factors obtained from the fits versus azimuth are
-displayed in Fig.~\ref{f:tsc}. The points were fitted with a sine wave
+displayed in Fig.~\ref{f:tsc}. The points were fitted with a sinusoid
 plus a 1$^{st}$-order polynomial. The period of the sine wave was
 fixed to $90^{\circ}$. The shifted polynomial is shown as a baseline
 in Fig.~\ref{f:tsc}. The data is reasonably well described by the
@@ -705,7 +920,7 @@ density and in reality varies with the azimuthal angle $\phi$.
 \includegraphics[width=\linewidth]{tsc}
 \caption{Mean time scaling factor (black dots) of a simulated $\langle
 110 \rangle$ pulse versus azimuth. The solid line represents a fit
-with a sine wave plus a 1$^{st}$-order polynomial. The dashed line
+with a sinusoid plus a 1$^{st}$-order polynomial. The dashed line
 shows the shifted polynomial as a baseline.}
 \label{f:tsc}
 \end{figure}
@@ -713,9 +928,9 @@ shows the shifted polynomial as a baseline.}
 The oscillation pattern expected and seen in Fig.~\ref{f:tsc} should
 disappear when the pulses are simulated for the individual angular
 configuration of the the scan points. This was done and the result is
-depicted in fig.~\ref{f:tsl}. Also given is the shifted polynomial
+depicted in Fig.~\ref{f:tsl}. Also given is the shifted polynomial
 from the fit to the data in Fig.~\ref{f:tsc} and a straight line fit
-to the points in fig.~\ref{f:tsl}. The two lines are very close
+to the points in Fig.~\ref{f:tsl}. The two lines are very close
 confirming the predictions of the model for the angular dependence of
 the rise-time. The deviations from the fitted straight line are below
 3\% and indicate that the real crystal is not as perfect as the
@@ -732,260 +947,64 @@ Fig.~\ref{f:tsc} is overlaid for comparison.}
 \label{f:tsl}
 \end{figure}
 
+
+\subsection{Pulse shape comparison}
+\label{s:psc}
+Although it is proven that the basic parameter risetime can be well
+simulated, detailed pulse shape comparison is still needed because of
+its importance for the pulse shape analysis. However, as shown in
+Fig.~\ref{f:s2d}, the comparison of an individual pulse is difficult,
+because the fine structure of a pulse is entangled with electronic
+noise. In order to suppress the electronic noise selected pulses in
+each scan data set were added up and the summed pulse was then divided
+by the number of selected pulses. The result is an averaged pulse with
+most of the electronic noise averaged out and the main structure shown
+up.
+
+The same averaging process has to be performed for simulated pulses,
+not to average out noise, but to take into account the spatial
+distribution of the hits from the 121~keV photons. A Geant4 simulation
+of the setup shown in Fig.~\ref{f:siscan} was performed. The
+$^{152}$Eu source was simplified in the simulation as a point-like
+isotropic emitter of 121~keV photons. Steps 2 - 6 described in
+Sec.~\ref{s:proc} were performed afterward. The resulting simulated
+pulses were averaged.
+
+The fit of the averaged simulated pulse to the averaged measured pulse
+at $280^{\circ}$ is shown in Fig.~\ref{f:ave}. The error bars in the
+measured pulse is too small to be seen. The $\chi^{2}$ of the fit is
+large because the systematic error due to the uncertain impurity
+distribution is not taken into account in the simulation.
+Nevertheless, the overall shape of the pulse is reproduced.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{averagedSim2Dat280}
+\caption{Fit of the averaged simulated to the averaged measured
+pulse.}
+\label{f:ave}
+\end{figure}
+
+
 \section{Summary}
 \label{s:sum}
 A fully functional pulse shape simulation package has been jointly
 developed by the GERDA and Majorana collaborations. Its application to
 true-coaxial $n$-type germanium detectors was partially verified by
-comparing to the data taken with two GERDA Phase~II prototype
-detectors. The data confirm the longitudinal anisotropies inherent to
+comparing to the data taken with the first GERDA Phase~II prototype
+detector. The data confirm the longitudinal anisotropies inherent to
 the model of the drift of charges carriers. The longitudinal
 anisotropy connected to the drift of electrons was seen in the
-dependence of the rise-time on the azimuthal angle, $\phi$, of the
+dependence of the risetime on the azimuthal angle, $\phi$, of the
 energy deposition. After adjusting the simulation reproduces the
-risetimes within $\pm$3\%.
+risetimes within $\pm$3\%, and describes the pulse shape well.
 
 \begin{acknowledgement}
 We would like to thank people in the Monte Carlo group of the Majorana
-collaboration for their kind help and cooperation in the programming.
+collaboration for their kind help in the analysis and cooperation in
+the programming.
 \end{acknowledgement}
 
-\begin{appendices}
-
-\section{Electron drift velocity}
-\label{s:elec} 
-\setcounter{equation}{0}
-\renewcommand{\theequation}{A.\arabic{equation}}
-\setcounter{figure}{0}
-\renewcommand{\thefigure}{A.\arabic{figure}}
-\setcounter{footnote}{0}
-
-In this appendix it is explained in detail how to calculate the
-electron drift velocity in an arbitrary direction using the model
-provided in \cite{miha} and references therein.
-
-There are four equivalent $\langle 111 \rangle$ axes in a germanium
-crystal. The equipotential surfaces of the conduction band in these
-regions have ellipsoidal shapes as shown in Fig~\ref{f:valley}.
-
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=0.6\linewidth]{valleys}   
-\caption{Ellipsoidal equipotential surfaces in regions near four
-equivalent $\langle 111 \rangle$ axes, where the probability density
-of free electrons is dominant (taken from Ref.~\cite{bart}).}
-\label{f:valley} 
-\end{figure} 
-
-The dependence of the electron drift velocity on the electric field
-can be written as
-\begin{equation} 
-\label{e:ed} 
-\vec{v}_{e}(\vec{E}) = - \mathcal{A}(E) \sum_{j} \frac{n_{j}}{n} 
-\frac{\gamma_{j}\vec{E_{0}}}
-{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}, 
-j=1,2,3,4,
-\end{equation} 
-where the coefficient $\mathcal{A}$ is a function of $E = |\vec{E}|$;
-$\vec{E_{0}}$ is the normalized electric field vector; $n_{j}/n$ is
-the fraction of free electrons drifting near the $j$-th $\langle 111
-\rangle$ axis and $\gamma_{j}$ is the effective mass tensor for these
-electrons; the negative sign indicates that electrons drift to the
-opposite direction of $\vec{E}$.
-
-The effective mass tensor in the local coordinates $x^{\prime}
-y^{\prime} z^{\prime}$ as defined in Fig.~\ref{f:axes} has a very
-simple expression:
-\begin{equation} 
-\label{e:g0} 
-\gamma_{0} \equiv \left( 
-\begin{array}{ccc} 
-m_{t}^{-1} & 0 & 0 \\ 
-0 & m_{l}^{-1} & 0 \\ 
-0 & 0 & m_{t}^{-1} 
-\end{array} \right), 
-\end{equation} 
-where $m_{t} = 1.64m_{e}$ is the transverse effective electron mass
-and $m_{l} = 0.0819m_{e}$ is the longitudinal effective electron mass,
-with $m_{e}$ denoting the free electron mass. Its expressions in any
-other coordinates, e.g. the $xyz$ coordinates, can be obtained by
-transforming $\gamma_{0}$ from $x^{\prime} y^{\prime} z^{\prime}$ to
-$xyz$ coordinates:
-\begin{equation} 
-\label{e:gs} 
-\gamma_{j} = R_{j}^{-1}\gamma_{0}R_{j} = R_{j}^{T}\gamma_{0}R_{j}, 
-\end{equation} 
-where 
-\begin{equation} 
-\label{e:rs} 
-R_{j} = R_{x^{\prime}}(\arccos(\sqrt{2/3}))R_{z}(\phi_{110}+(j-1)\pi/2) 
-\end{equation} 
-is the rotation matrix which aligns $x^{\prime}, y^{\prime},
-z^{\prime}$ to $x,y,z$, respectively. $R_a(\alpha)$ indicates a
-counter-clockwise rotation\footnote{defined as looking along the
-axis.} around the axis~$a$ with rotation angle~$\alpha$.
- 
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=0.7\linewidth]{axes}   
-\caption{Relation between the local coordinates $x^{\prime} y^{\prime}
-z^{\prime}$ and the Geant4 coordinates $xyz$. The $x^{\prime}$ axis is
-perpendicular to the plane defined by $\langle111\rangle$ and $\langle
-001 \rangle$.}
-\label{f:axes} 
-\end{figure} 
-
-The deviation from an equal population (1/4) of free electrons is
-assumed to depend on the electric field like:
-\begin{equation} 
-\label{e:nion} 
-\frac{n_{j}}{n} = \frac{1}{4} + \mathcal{R}(E) 
-\left[ \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}}
-{\sum_{i}\sqrt{\vec{E_{0}}^{T}\gamma_{i}\vec{E_{0}}}} - 
-\frac{1}{4} \right],  
-\end{equation} 
-where the coefficient $\mathcal{R}$ is a function of $E=|\vec{E}|$.
- 
-An electric field applied along the $\langle 100 \rangle$ direction
-affects the population of the electrons in all $\langle 111 \rangle$
-valleys equally, hence $n_{j}/n = 1/4$. In this case $\mathcal{A}(E)$
-can be simply expressed as
-\begin{equation} 
-\label{e:ae} 
-\mathcal{A}(E) = - \frac{v_{e}^{100}(E)}  
-{\displaystyle \sum_{j} \frac{1}{4} \frac{\gamma_{j}}
-{\sqrt{\vec{E}_{0}^{T}\gamma_{j}\vec{E}_{0}}}}
-\end{equation}
-with $\vec{E}_{0}$ parallel to $\langle 100 \rangle$, and
-$v_{e}^{100}(E)$ being the drift velocity along $\langle 100 \rangle$,
-which is given by Eq.~\ref{e:para}.
- 
-If the electric field vector is oriented along one of the four
-equivalent $\langle 111 \rangle$ axes, there is a uniform population
-of the electrons among the other three $\langle 111 \rangle$ axes,
-namely,
-\begin{equation} 
-\label{e:n111} 
-\frac{n_{2}}{n} = \frac{n_{3}}{n} = \frac{n_{4}}{n}. 
-\end{equation} 
-Since 
-\begin{equation} 
-\label{e:nsum} 
-\displaystyle \sum_{j}\frac{n_{j}}{n} = 1, 
-\end{equation} 
-we have 
-\begin{equation} 
-\label{e:n12} 
-\frac{n_{1}}{n} + 3\frac{n_{2}}{n}= 1. 
-\end{equation} 
-Another relation between $n_{1}/n$ and $n_{2}/n$ is obtained from
-Eq.~\ref{e:ed}:
-\begin{equation} 
-\label{e:n12p} 
-\begin{split}
-- \frac{v_{e}^{111}(E)}{\mathcal{A}(E)} = &
-\frac{n_{1}}{n} \frac{\gamma_{1}} 
-{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}} +
-\frac{n_{2}}{n} \frac{\gamma_{2}}         
-{\sqrt{\vec{E_{0}}^{T}\gamma_{2}\vec{E_{0}}}} \\ + &
-\frac{n_{2}}{n} \frac{\gamma_{3}}         
-{\sqrt{\vec{E_{0}}^{T}\gamma_{3}\vec{E_{0}}}} +  
-\frac{n_{2}}{n} \frac{\gamma_{4}}         
-{\sqrt{\vec{E_{0}}^{T}\gamma_{4}\vec{E_{0}}}}, 
-\end{split}
-\end{equation}
-with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$ and
-$v_{e}^{111}(E)$ being the drift velocity along $\langle 111 \rangle$,
-which is given by Eq.~\ref{e:para}. The values of $n_{1}/n$ and
-$n_{2}/n$ can be obtained by solving Eqs.~\ref{e:n12} and
-\ref{e:n12p}. Then $\mathcal{R}(E)$ can be calculated as
-\begin{equation} 
-\label{e:re} 
-\mathcal{R}(E) = \frac{n_{1}/n - 1/4}
-{\displaystyle \frac{\sqrt{\vec{E_{0}}^{T}\gamma_{1}\vec{E_{0}}}}
-{\sum_{j}\sqrt{\vec{E_{0}}^{T}\gamma_{j}\vec{E_{0}}}} - 
-\frac{1}{4}},
-\end{equation} 
-with $\vec{E_{0}}$ parallel to $\langle 111 \rangle$.
-
-Once $\mathcal{A}$ and $\mathcal{R}$ are known, $\vec{v}_{e}$ can be
-obtained by solving Eqs.~\ref{e:ed} and \ref{e:nion}. Since the values
-of $\mathcal{A}$ and $\mathcal{R}$ are independent of $\phi_{110}$,
-$\phi_{110}$ can be set to zero during the determination of
-$\mathcal{A}$ and $\mathcal{R}$ so that the calculation is simplified.
-
-\section{Hole drift velocity} 
-\label{s:hole} 
-\setcounter{equation}{0}
-\renewcommand{\theequation}{B.\arabic{equation}}
-\setcounter{figure}{0}
-\renewcommand{\thefigure}{B.\arabic{figure}}
-
-In this appendix it is explained in detail how to calculate the hole
-drift velocity in an arbitrary direction using the model provided in
-\cite{bart} and references therein.
-
-It is assumed in this model that the mean wave vector
-$\vec{k}_{0}(k_{0}, \theta_{0}, \phi_{0})$ of heavy holes is aligned
-with the electric field $\vec{E}(E, \theta, \phi)$, namely,
-$\theta_{0} = \theta, \phi_{0} = \phi$, where $\theta, \phi$ are the
-polar and azimuthal angles with respect to the coordinate system
-defined by the $\langle 100 \rangle$, $\langle 010 \rangle$ and
-$\langle 001 \rangle$ axes. as shown in Fig.~\ref{f:vsphere}
-  
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=0.8\linewidth]{vsphere}   
-\caption{Relation between the crystal axes $\langle 100 \rangle$,
-$\langle 010 \rangle$ and $\langle 001 \rangle$, the coordinates
-$xyz$, and the local coordinates $x^{\prime} y^{\prime} z^{\prime}$.}
-\label{f:vsphere} 
-\end{figure} 
-
-The three components of the hole drift velocity $\vec{v}$ in the local
-coordinates, $x^{\prime} y^{\prime} z^{\prime}$, at any position $(r,
-\theta, \phi)$ can be expressed as:
-\begin{eqnarray*} 
-\label{e:vsphere} 
-v_{x^{\prime}} &=& v^{100}_{h}(E)
-[1-\Lambda(k_{0})(\sin(\theta)^{4}\sin(2\phi)^{2} + \sin(2\theta)^{2})],\\ 
-v_{y^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})
-[2\sin(\theta)^{3}\cos(\theta)\sin(2\phi)^{2} + \sin(4\theta)],\\ 
-v_{z^{\prime}} &=& v^{100}_{h}(E)\Omega(k_{0})\sin(\theta)^{3}\sin(4\phi), 
-\end{eqnarray*} 
-where $v^{111}_{h}$ and $v^{100}_{h}$ are the drift velocities along
-the $\langle 111 \rangle$ and $\langle 100 \rangle$ axes, which can be
-calculated using Eq.~\ref{e:para}, $\Lambda$ and $\Omega$, governing
-the longitudinal and transverse anisotropy of the drift, can be
-expressed as
-\begin{eqnarray*} 
-\label{e:lamb} 
-\Lambda(k_{0}) &=& -0.01322k_{0} + 0.41145k_{0}^{2} - 0.23657k_{0}^{3} + 0.04077k_{0}^{4},\\
-\Omega(k_{0}) &=& 0.006550k_{0} - 0.19946k_{0}^{2} + 0.09859k_{0}^{3} - 0.01559k_{0}^{4}. 
-\end{eqnarray*} 
-The mean wave number $k_{0}$ can be expressed as a function of
-$v_{r} = v^{111}_{h}(E)/v^{100}_{h}(E)$:
-\begin{eqnarray*} 
-\label{e:k0} 
-k_{0}(v_{r}) = 9.2652 - 26.3467v_{r} + 29.6137v_{r}^{2} - 12.3689v_{r}^{3}. 
-\end{eqnarray*} 
- 
-The hole drift velocity in the $xyz$ coordinates is abtained by
-transforming its expression in the local coordinates $x^{\prime}
-y^{\prime} z^{\prime}$ to $xyz$:
-\begin{equation*} 
-\label{e:v2v}   
-\left( 
-\begin{array}{c} 
-v_{x} \\ v_{y} \\ v_{z} 
-\end{array} 
-\right) = R_{z}(\phi + \frac{\pi}{4} + \phi_{110}) R_{y^{\prime}}(\theta) \left(  
-\begin{array}{c} 
-v_{x^{\prime}} \\ v_{y^{\prime}} \\ v_{z^{\prime}} 
-\end{array} \right).
-\end{equation*}
-
-\end{appendices}
 
 \begin{thebibliography}{}
 % gerda
